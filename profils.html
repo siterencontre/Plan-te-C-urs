@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Profils - Planète Cœurs</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="app.js"></script>
+</head>
+<body>
+<header><h1>Profils des Membres</h1></header>
+<div id="profils"></div>
+<script>
+db.collection('profils').get().then(snapshot => {
+const container = document.getElementById('profils');
+snapshot.forEach(doc => {
+const data = doc.data();
+const div = document.createElement('div');
+div.className = 'profil';
+div.innerHTML = `<h3>${data.pseudo}</h3><p>${data.pays}, ${data.localisation}</p><p>${data.bio}</p>`;
+container.appendChild(div);
+});
+});
+</script>
+</body>
+</html>
