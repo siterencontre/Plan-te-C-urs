@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Planète Cœurs</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planète Cœur - Connexion</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<header><h1>💖 Bienvenue sur Planète Cœurs 💖</h1></header>
-<nav>
-<a href="index.html">Accueil</a> |
-<a href="inscription.html">Inscription</a> |
-<a href="connexion.html">Connexion</a> |
-<a href="profils.html">Profils</a>
-</nav>
-<main>
-<p>Le site de rencontre romantique où vos rêves deviennent réalité.</p>
-<button onclick="alert('Signaler un abus')">🚨 Signaler</button>
-</main>
+  <div class="container">
+    <h1>❤️ Planète Cœur</h1>
+    <h2>Créer un compte</h2>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Mot de passe" />
+    <button onclick="signUp()">S'inscrire</button>
+
+    <h2>Se connecter</h2>
+    <input type="email" id="loginEmail" placeholder="Email" />
+    <input type="password" id="loginPassword" placeholder="Mot de passe" />
+    <button onclick="signIn()">Connexion</button>
+  </div>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
