@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Inscription - Planète Cœurs</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="app.js"></script>
+</head>
+<body>
+<header><h1>Inscription</h1></header>
+<form id="signupForm">
+<input type="email" id="email" placeholder="Email" required><br>
+<input type="password" id="password" placeholder="Mot de passe" required><br>
+<input type="text" id="pseudo" placeholder="Pseudo" required><br>
+<input type="text" id="pays" placeholder="Pays" required><br>
+<input type="text" id="localisation" placeholder="Ville, Quartier" required><br>
+<textarea id="bio" placeholder="Quelques mots sur vous..."></textarea><br>
+<button type="submit">S'inscrire</button>
+</form>
+<script>
+document.getElementById('signupForm').addEventListener('submit', e => {
+e.preventDefault();
+const email = email.value, password = password.value, pseudo = pseudo.value,
+pays = pays.value, localisation = localisation.value, bio = bio.value;
+auth.createUserWithEmailAndPassword(email, password)
+.then(cred => {
+return db.collection('profils').doc(cred.user.uid).set({
+pseudo, pays, localisation, bio, email
+});
+})
+.then(() => alert('Inscription réussie !'))
+.catch(err => alert(err.message));
+});
+</script>
+</body>
+</html>
