@@ -1,26 +1,33 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #f7f7f7;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
   margin: 0;
   padding: 0;
 }
 
 .container {
   max-width: 400px;
-  margin: 30px auto;
+  margin: 40px auto;
   background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  text-align: center;
 }
 
 h1 {
-  text-align: center;
-  color: #ff3366;
+  color: #e75480;
+  font-size: 28px;
+}
+
+p {
+  color: #444;
+  font-size: 16px;
+  margin-bottom: 20px;
 }
 
 h2 {
-  color: #333;
+  color: #e75480;
   margin-top: 20px;
 }
 
@@ -28,19 +35,23 @@ input {
   width: 100%;
   padding: 12px;
   margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   box-sizing: border-box;
 }
 
 button {
   width: 100%;
   padding: 12px;
-  background: #ff3366;
+  background: #e75480;
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 25px;
+  font-size: 16px;
+  margin-top: 5px;
 }
 
 button:hover {
-  background: #ff6688;
+  background: #ff6699;
 }
