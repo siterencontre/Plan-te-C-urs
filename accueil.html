@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accueil - Planète Cœurs</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ffe6f2;
+  margin: 0;
+  padding: 0;
+}
+header {
+  background-color: #d6336c;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-size: 1.5em;
+}
+nav {
+  background: #fff;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+nav a {
+  color: #d6336c;
+  text-decoration: none;
+  font-weight: bold;
+}
+section {
+  padding: 20px;
+  text-align: center;
+}
+input, button {
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+button {
+  background-color: #d6336c;
+  color: white;
+  border: none;
+}
+button:hover {
+  background-color: #b82e5c;
+}
+.friend {
+  background: #fff;
+  margin: 10px auto;
+  padding: 10px;
+  max-width: 400px;
+  text-align: left;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+<body>
+
+<header>
+  🌹 Planète Cœurs 🌹
+</header>
+
+<nav>
+  <a href="profil.html">Profil</a>
+  <a href="publications.html">Publications</a>
+  <a href="messagerie.html">Messagerie</a>
+  <a href="accueil.html">Accueil</a>
+</nav>
+
+<section>
+  <h2>Statut ❤️</h2>
+  <textarea id="status" placeholder="Écrivez votre statut..."></textarea><br>
+  <button onclick="updateStatus()">Mettre à jour</button>
+
+  <h2>Rechercher des amis 👥</h2>
+  <input type="text" id="search" placeholder="Nom ou prénom">
+  <button onclick="searchFriends()">Rechercher</button>
+
+  <div id="results"></div>
+</section>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDU5mzsxsDAa2tmq9fwQcf-DD7rNY9riU8",
+  authDomain: "planete-coeur.firebaseapp.com",
+  projectId: "planete-coeur",
+  storageBucket: "planete-coeur.firebasestorage.app",
+  messagingSenderId: "124827847585",
+  appId: "1:124827847585:web:64b56079fcafdd61f5d9e0",
+  measurementId: "G-2SBTXBB67B"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    const docSnap = await getDoc(doc(db, "users", user.uid));
+    if (docSnap.exists()) {
+      document.getElementById("status").value = docSnap.data().status || "";
+    }
+  } else {
+    alert("Vous devez être connecté !");
+    window.location.href = "index.html";
+  }
+});
+
+window.updateStatus = async () => {
+  const status = document.getElementById("status").value.trim();
+  await updateDoc(doc(db, "users", currentUser.uid), { status });
+  alert("Statut mis à jour !");
+};
+
+window.searchFriends = async () => {
+  const keyword = document.getElementById("search").value.trim().toLowerCase();
+  const resultsDiv = document.getElementById("results");
+  resultsDiv.innerHTML = "";
+
+  const snapshot = await getDocs(collection(db, "users"));
+  snapshot.forEach(docu => {
+    const data = docu.data();
+    if ((data.nom && data.nom.toLowerCase().includes(keyword)) ||
+        (data.prenom && data.prenom.toLowerCase().includes(keyword))) {
+      const div = document.createElement("div");
+      div.className = "friend";
+      div.innerHTML = `
+        <strong>${data.nom} ${data.prenom}</strong><br>
+        ${data.pays || ""}, ${data.ville || ""}<br>
+        <button onclick="addFriend('${docu.id}')">Ajouter en ami</button>
+      `;
+      resultsDiv.appendChild(div);
+    }
+  });
+};
+
+window.addFriend = (friendId) => {
+  alert(`Demande envoyée à l'utilisateur avec ID : ${friendId}`);
+  // Ici on pourrait enregistrer dans Firestore la relation d’amis.
+};
+</script>
+
+</body>
+</html>
