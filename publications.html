@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planète Cœurs - Publications 💖</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #ffe6f2;
+  padding: 20px;
+}
+.post {
+  background: white;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+.comment {
+  margin-left: 20px;
+  color: #555;
+  font-size: 0.9em;
+}
+</style>
+</head>
+<body>
+
+<h1>🌸 Publications et Commentaires</h1>
+
+<div id="posts"></div>
+
+<script type="module">
+// Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+  authDomain: "planetes-coeurs-site.firebaseapp.com",
+  projectId: "planetes-coeurs-site",
+  storageBucket: "planetes-coeurs-site.appspot.com",
+  messagingSenderId: "433372689765",
+  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+  measurementId: "G-SMZTEG955E"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Fonction pour afficher les publications
+const postsContainer = document.getElementById("posts");
+
+async function displayPosts() {
+  const querySnapshot = await getDocs(collection(db, "publications"));
+  postsContainer.innerHTML = "";
+
+  querySnapshot.forEach(docSnap => {
+    const post = docSnap.data();
+    const div = document.createElement("div");
+    div.className = "post";
+    div.innerHTML = `
+      <h3>${post.titre || "Publication"}</h3>
+      <p>${post.contenu || ""}</p>
+      <div id="comments-${docSnap.id}">
+        ${post.commentaires?.map(c => `<div class="comment">💬 ${c}</div>`).join("") || ""}
+      </div>
+      <input type="text" id="comment-input-${docSnap.id}" placeholder="Votre commentaire…">
+      <button onclick="addComment('${docSnap.id}')">Commenter</button>
+    `;
+    postsContainer.appendChild(div);
+  });
+}
+
+window.addComment = async function(postId) {
+  const input = document.getElementById(`comment-input-${postId}`);
+  const comment = input.value.trim();
+  if (!comment) return;
+
+  const postRef = doc(db, "publications", postId);
+  await updateDoc(postRef, {
+    commentaires: arrayUnion(comment)
+  });
+  input.value = "";
+  displayPosts();
+};
+
+displayPosts();
+</script>
+
+</body>
+</html>
