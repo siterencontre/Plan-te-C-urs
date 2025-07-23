@@ -1,161 +1,65 @@
-<!DOCTYPE html><html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Planète Cœurs - Mur</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: #fff0f5;
-    }
-    header {
-      background: #fff;
-      padding: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #eee;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    .logo {
-      color: #e91e63;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    .icons span {
-      font-size: 20px;
-      margin: 0 10px;
-      cursor: pointer;
-    }
-    .container {
-      max-width: 800px;
-      margin: 20px auto;
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .user-info, .story-bar, .new-post, .post, .settings {
-      margin-bottom: 20px;
-    }
-    .user-info {
-      display: flex;
-      align-items: center;
-    }
-    .user-info img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 15px;
-    }
-    .story-bar {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-    }
-    .story {
-      width: 80px;
-      height: 120px;
-      background: #f8bbd0;
-      border-radius: 10px;
-      text-align: center;
-      padding: 5px;
-      font-size: 12px;
-    }
-    textarea {
-      width: 100%;
-      padding: 10px;
-      resize: none;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-    }
-    .new-post button {
-      background: #e91e63;
-      color: white;
-      padding: 8px 20px;
-      border: none;
-      border-radius: 20px;
-    }
-    .post {
-      border-top: 1px solid #eee;
-      padding-top: 10px;
-    }
-    .post .author {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .post img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-    .post .actions {
-      margin-top: 10px;
-      display: flex;
-      gap: 15px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .settings {
-      text-align: center;
-    }
-    .settings button {
-      background: #ccc;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 8px;
-      margin: 5px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="logo">Planète Cœurs 💖</div>
-    <div class="icons">
-      <span>🔔</span>
-      <span>💌</span>
-      <span>⚙️</span>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+  authDomain: "planetes-coeurs-site.firebaseapp.com",
+  projectId: "planetes-coeurs-site",
+  storageBucket: "planetes-coeurs-site.appspot.com",
+  messagingSenderId: "433372689765",
+  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const textarea = document.querySelector(".new-post textarea");
+const publierBtn = document.querySelector(".new-post button");
+const container = document.querySelector(".container");
+
+function afficherPost(post) {
+  const div = document.createElement("div");
+  div.className = "post";
+  div.innerHTML = `
+    <div class="author">${post.auteur}</div>
+    <div>${post.contenu}</div>
+    <div style="font-size:12px;color:gray;">${new Date(post.timestamp?.seconds * 1000).toLocaleString()}</div>
+    <div class="actions">
+      <span>❤️ ${post.likes || 0} Like</span>
+      <span>💬 Commentaire</span>
+      <span>🔗 Partager</span>
     </div>
-  </header>  <div class="container"><div class="user-info">
-  <img src="https://i.pravatar.cc/100?u=user" alt="profil">
-  <div>
-    <div id="username">Utilisateur</div>
-    <div style="font-size:12px;color:gray;">En ligne</div>
-  </div>
-</div>
+  `;
+  container.appendChild(div);
+}
 
-<div class="story-bar">
-  <div class="story">Ma Story</div>
-  <div class="story">Rita</div>
-  <div class="story">Franck</div>
-</div>
+publierBtn.addEventListener("click", async () => {
+  const contenu = textarea.value.trim();
+  if (!contenu) return alert("Écris quelque chose !");
+  await addDoc(collection(db, "publications"), {
+    auteur: "Utilisateur", // plus tard on mettra le vrai nom
+    contenu,
+    timestamp: serverTimestamp(),
+    likes: 0
+  });
+  textarea.value = "";
+});
 
-<div class="new-post">
-  <textarea placeholder="Exprime-toi..."></textarea>
-  <button>Publier</button>
-</div>
+const q = query(collection(db, "publications"), orderBy("timestamp", "desc"));
+onSnapshot(q, snapshot => {
+  document.querySelectorAll(".post").forEach(e => e.remove());
+  snapshot.forEach(doc => afficherPost(doc.data()));
+});
 
-<div class="post">
-  <div class="author">Rita 💞</div>
-  <div>La vie est belle avec toi 💫</div>
-  <img src="https://placekitten.com/500/300" alt="publication">
-  <div class="actions">
-    <span>❤️ Like</span>
-    <span>💬 Commentaire</span>
-    <span>🔗 Partager</span>
-  </div>
-</div>
-
-<div class="settings">
-  <h3>Paramètres du profil</h3>
-  <button>Modifier le profil</button>
-  <button>Changer la photo</button>
-  <button>Se déconnecter</button>
-</div>
-
-  </div>
-</body>
-</html>
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    alert("Vous devez être connecté !");
+    window.location.href = "index.html";
+  } else {
+    document.getElementById("username").textContent = user.email;
+  }
+});
+</script>
