@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Profil - Planète Cœurs</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(120deg, #ffd1dc, #ffe6f2);
+  text-align: center;
+  padding: 20px;
+  color: #333;
+}
+.container {
+  max-width: 500px;
+  margin: 30px auto;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+h1 {
+  color: #d6336c;
+}
+input {
+  width: 90%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+button {
+  margin-top: 10px;
+  background-color: #d6336c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+button:hover {
+  background-color: #b82e5c;
+}
+img {
+  width: 100px;
+  margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <img src="images/logo.png" alt="Logo">
+  <h1>Mon Profil 💖</h1>
+  <p>Bienvenue, <span id="user-name"></span> !</p>
+
+  <input type="text" id="nom" placeholder="Nom">
+  <input type="text" id="prenom" placeholder="Prénom">
+  <input type="text" id="email" placeholder="Email" readonly>
+  <input type="text" id="telephone" placeholder="Téléphone">
+  <input type="text" id="pays" placeholder="Pays">
+  <input type="text" id="ville" placeholder="Ville">
+  <input type="text" id="quartier" placeholder="Quartier">
+  <input type="text" id="profession" placeholder="Profession">
+  <br>
+  <button onclick="updateProfile()">Mettre à jour</button>
+  <button onclick="logout()">Déconnexion</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+  authDomain: "planetes-coeurs-site.firebaseapp.com",
+  projectId: "planetes-coeurs-site",
+  storageBucket: "planetes-coeurs-site.appspot.com",
+  messagingSenderId: "433372689765",
+  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+  measurementId: "G-SMZTEG955E"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const uid = user.uid;
+    const docRef = doc(db, "utilisateurs", uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      document.getElementById("user-name").textContent = data.prenom || '';
+      document.getElementById("nom").value = data.nom || '';
+      document.getElementById("prenom").value = data.prenom || '';
+      document.getElementById("email").value = data.email || user.email;
+      document.getElementById("telephone").value = data.telephone || '';
+      document.getElementById("pays").value = data.pays || '';
+      document.getElementById("ville").value = data.ville || '';
+      document.getElementById("quartier").value = data.quartier || '';
+      document.getElementById("profession").value = data.profession || '';
+    } else {
+      alert("Aucune donnée trouvée.");
+    }
+  } else {
+    window.location.href = "index.html";
+  }
+});
+
+window.updateProfile = async function () {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const uid = user.uid;
+  const docRef = doc(db, "utilisateurs", uid);
+
+  await setDoc(docRef, {
+    nom: document.getElementById("nom").value,
+    prenom: document.getElementById("prenom").value,
+    email: document.getElementById("email").value,
+    telephone: document.getElementById("telephone").value,
+    pays: document.getElementById("pays").value,
+    ville: document.getElementById("ville").value,
+    quartier: document.getElementById("quartier").value,
+    profession: document.getElementById("profession").value
+  }, { merge: true });
+
+  alert("Profil mis à jour !");
+}
+
+window.logout = function () {
+  signOut(auth).then(() => {
+    window.location.href = "index.html";
+  });
+}
+</script>
+
+</body>
+</html>
