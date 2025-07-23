@@ -1,59 +1,35 @@
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(to bottom right, #ffb6c1, #ffe4e1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  background-color: #ffe6f2;
+  color: #333;
+  text-align: center;
   margin: 0;
+  padding: 0;
 }
 .container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
   background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
-  width: 400px;
-  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-h1 {
-  color: #d6336c;
-  font-size: 32px;
-  margin-bottom: 20px;
-}
-input {
-  width: 100%;
-  padding: 15px;
+input, button {
+  width: 90%;
+  padding: 10px;
   margin: 10px 0;
-  font-size: 18px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 5px;
 }
 button {
-  width: 48%;
-  padding: 15px;
-  font-size: 18px;
-  background-color: #d6336c;
+  background-color: #ff66a3;
   color: white;
   border: none;
-  border-radius: 6px;
   cursor: pointer;
 }
 button:hover {
-  background-color: #c2185b;
+  background-color: #e05591;
 }
 a {
-  display: block;
-  margin-top: 20px;
-  color: #d6336c;
-  text-decoration: none;
-  font-size: 16px;
-}
-a:hover {
-  text-decoration: underline;
-}
-.step {
-  display: none;
-}
-.step.active {
-  display: block;
+  color: #ff66a3;
 }
