@@ -7,18 +7,18 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background-color: #ffe6f2;
-  color: #333;
+  background: linear-gradient(120deg, #ffd1dc, #ffe6f2);
   text-align: center;
   padding: 20px;
+  color: #333;
 }
 .container {
   max-width: 400px;
-  margin: auto;
-  background: #fff;
-  border-radius: 10px;
+  margin: 30px auto;
+  background: white;
+  border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 h1 {
   color: #d6336c;
@@ -26,14 +26,15 @@ h1 {
 input, button {
   width: 90%;
   padding: 10px;
-  margin: 8px 0;
+  margin: 10px 0;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 button {
   background-color: #d6336c;
   color: white;
   border: none;
+  cursor: pointer;
 }
 button:hover {
   background-color: #b82e5c;
@@ -48,13 +49,13 @@ a {
 
 <div class="container">
   <h1>Planète Cœurs 💖</h1>
-  <p>Connectez-vous ou créez votre compte pour commencer</p>
+  <p>Bienvenue ! Connectez-vous ou créez votre compte</p>
 
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Mot de passe">
   <button onclick="login()">Connexion</button>
 
-  <p>Pas encore inscrit ? <a href="#" onclick="showSignup()">Créer un compte</a></p>
+  <p>Pas encore inscrit ? <a href="#" onclick="showSignup()">Créer un compte</a></p>
 
   <div id="signup" style="display:none;">
     <input type="text" id="nom" placeholder="Nom">
@@ -73,45 +74,45 @@ a {
 </div>
 
 <script type="module">
-// Import Firebase
+// Importer Firebase depuis le CDN
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDU5mzsxsDAa2tmq9fwQcf-DD7rNY9riU8",
-  authDomain: "planete-coeur.firebaseapp.com",
-  projectId: "planete-coeur",
-  storageBucket: "planete-coeur.firebasestorage.app",
-  messagingSenderId: "124827847585",
-  appId: "1:124827847585:web:64b56079fcafdd61f5d9e0",
-  measurementId: "G-2SBTXBB67B"
+  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+  authDomain: "planetes-coeurs-site.firebaseapp.com",
+  projectId: "planetes-coeurs-site",
+  storageBucket: "planetes-coeurs-site.appspot.com",
+  messagingSenderId: "433372689765",
+  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+  measurementId: "G-SMZTEG955E"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-window.showSignup = function() {
+window.showSignup = function () {
   document.getElementById("signup").style.display = "block";
 }
 
-window.signup = function() {
+window.signup = function () {
   const email = document.getElementById("signup-email").value;
   const password = document.getElementById("signup-password").value;
   const confirm = document.getElementById("confirm-password").value;
 
   if (password !== confirm) {
-    alert("Les mots de passe ne correspondent pas !");
+    alert("Les mots de passe ne correspondent pas !");
     return;
   }
 
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      const user = userCredential.user;
+      const uid = userCredential.user.uid;
+      const userDoc = doc(db, "utilisateurs", uid);
 
-      // Enregistrer les infos dans Firestore
-      return setDoc(doc(db, "utilisateurs", user.uid), {
+      setDoc(userDoc, {
         nom: document.getElementById("nom").value,
         prenom: document.getElementById("prenom").value,
         date_naissance: document.getElementById("dob").value,
@@ -120,29 +121,23 @@ window.signup = function() {
         quartier: document.getElementById("quartier").value,
         profession: document.getElementById("profession").value,
         telephone: document.getElementById("tel").value,
-        email: email,
-        photo_profil: "",
-        photo_couverture: "",
-        badge: ""
+        email: email
+      }).then(() => {
+        alert("Compte créé et informations enregistrées !");
       });
-    })
-    .then(() => {
-      alert("Compte créé et enregistré !");
-      location.reload();
     })
     .catch((error) => {
       alert(error.message);
     });
 }
 
-window.login = function() {
+window.login = function () {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
-      alert("Connecté avec succès !");
-      // Ici, tu peux rediriger l’utilisateur vers une autre page si tu veux.
+      alert("Connecté avec succès !");
     })
     .catch((error) => {
       alert(error.message);
