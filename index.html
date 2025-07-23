@@ -2,130 +2,19 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Planète Cœurs - Connexion</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background-color: #ffe6f2;
-  color: #333;
-  text-align: center;
-  padding: 20px;
-}
-.container {
-  max-width: 400px;
-  margin: auto;
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-h1 {
-  color: #d6336c;
-}
-input, button {
-  width: 90%;
-  padding: 10px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-button {
-  background-color: #d6336c;
-  color: white;
-  border: none;
-}
-button:hover {
-  background-color: #b82e5c;
-}
-a {
-  color: #d6336c;
-  text-decoration: none;
-}
-</style>
+<title>Connexion - Planète Cœurs</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div class="container">
-  <h1>Planète Cœurs 💖</h1>
-  <p>Connectez-vous ou créez votre compte pour commencer</p>
-
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Mot de passe">
-  <button onclick="login()">Connexion</button>
-
-  <p>Pas encore inscrit ? <a href="#" onclick="showSignup()">Créer un compte</a></p>
-
-  <div id="signup" style="display:none;">
-    <input type="text" id="nom" placeholder="Nom">
-    <input type="text" id="prenom" placeholder="Prénom">
-    <input type="date" id="dob" placeholder="Date de naissance">
-    <input type="text" id="pays" placeholder="Pays">
-    <input type="text" id="ville" placeholder="Ville">
-    <input type="text" id="quartier" placeholder="Quartier">
-    <input type="text" id="profession" placeholder="Profession">
-    <input type="text" id="tel" placeholder="Téléphone">
-    <input type="email" id="signup-email" placeholder="Email">
-    <input type="password" id="signup-password" placeholder="Mot de passe">
-    <input type="password" id="confirm-password" placeholder="Confirmer le mot de passe">
-    <button onclick="signup()">Créer mon compte</button>
-  </div>
+<h1>Bienvenue sur Planète Cœurs</h1>
+<form id="loginForm">
+  <input type="text" id="emailOrPhone" placeholder="Email ou numéro" required><br>
+  <input type="password" id="password" placeholder="Mot de passe" required><br>
+  <button type="submit">Se connecter</button>
+</form>
+<p>Pas encore de compte ? <a href="register.html">Créer un compte</a></p>
 </div>
-
-<script type="module">
-// Importer Firebase depuis le CDN
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDU5mzsxsDAa2tmq9fwQcf-DD7rNY9riU8",
-  authDomain: "planete-coeur.firebaseapp.com",
-  projectId: "planete-coeur",
-  storageBucket: "planete-coeur.firebasestorage.app",
-  messagingSenderId: "124827847585",
-  appId: "1:124827847585:web:64b56079fcafdd61f5d9e0",
-  measurementId: "G-2SBTXBB67B"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-window.showSignup = function() {
-  document.getElementById("signup").style.display = "block";
-}
-
-window.signup = function() {
-  const email = document.getElementById("signup-email").value;
-  const password = document.getElementById("signup-password").value;
-  const confirm = document.getElementById("confirm-password").value;
-
-  if (password !== confirm) {
-    alert("Les mots de passe ne correspondent pas !");
-    return;
-  }
-
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("Compte créé avec succès !");
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-}
-
-window.login = function() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("Connecté avec succès !");
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-}
-</script>
-
+<script type="module" src="script.js"></script>
 </body>
 </html>
