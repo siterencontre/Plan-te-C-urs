@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Réinitialiser le mot de passe</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffeef5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .reset-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #d81b60;
+    }
+  </style>
+</head>
+<body>
+  <div class="reset-container">
+    <h2>Réinitialiser le mot de passe</h2>
+    <input type="email" id="email" placeholder="Votre e-mail" required />
+    <button onclick="resetPassword()">Envoyer le lien</button>
+    <p id="message"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+      authDomain: "planetes-coeurs-site.firebaseapp.com",
+      projectId: "planetes-coeurs-site",
+      storageBucket: "planetes-coeurs-site.appspot.com",
+      messagingSenderId: "433372689765",
+      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    function resetPassword() {
+      const email = document.getElementById("email").value;
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          document.getElementById("message").textContent = "✅ Lien envoyé à votre adresse email.";
+        })
+        .catch((error) => {
+          document.getElementById("message").textContent = "❌ Erreur : " + error.message;
+        });
+    }
+  </script>
+</body>
+</html>
