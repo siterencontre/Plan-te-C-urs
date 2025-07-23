@@ -23,6 +23,10 @@ body {
 h1 {
   color: #d6336c;
 }
+img.logo {
+  width: 120px;
+  margin-bottom: 15px;
+}
 input, button {
   width: 90%;
   padding: 10px;
@@ -48,14 +52,16 @@ a {
 <body>
 
 <div class="container">
+  <img src="images/logo.png" alt="Planète Cœurs" class="logo">
   <h1>Planète Cœurs 💖</h1>
-  <img src="logo.png" alt="Logo Planète Cœurs" style="width: 100px; margin: 10px auto; display:block;">
   <p>Bienvenue ! Connectez-vous ou créez votre compte</p>
 
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Mot de passe">
   <button onclick="login()">Connexion</button>
-  <button onclick="loginWithGoogle()" style="background-color:#4285F4">Connexion avec Google</button>
+
+  <p>Ou connectez-vous avec :</p>
+  <button onclick="loginWithGoogle()">Google</button>
 
   <p>Pas encore inscrit ? <a href="#" onclick="showSignup()">Créer un compte</a></p>
 
@@ -63,12 +69,8 @@ a {
     <input type="text" id="nom" placeholder="Nom">
     <input type="text" id="prenom" placeholder="Prénom">
     <input type="date" id="dob" placeholder="Date de naissance">
-    <input type="text" id="pays" placeholder="Pays">
-    <input type="text" id="ville" placeholder="Ville">
-    <input type="text" id="quartier" placeholder="Quartier">
-    <input type="text" id="profession" placeholder="Profession">
-    <input type="text" id="tel" placeholder="Téléphone">
     <input type="email" id="signup-email" placeholder="Email">
+    <input type="text" id="tel" placeholder="Téléphone">
     <input type="password" id="signup-password" placeholder="Mot de passe">
     <input type="password" id="confirm-password" placeholder="Confirmer le mot de passe">
     <button onclick="signup()">Créer mon compte</button>
@@ -76,6 +78,7 @@ a {
 </div>
 
 <script type="module">
+// Importer Firebase depuis le CDN
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
@@ -93,6 +96,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
 window.showSignup = function () {
   document.getElementById("signup").style.display = "block";
@@ -117,10 +121,6 @@ window.signup = function () {
         nom: document.getElementById("nom").value,
         prenom: document.getElementById("prenom").value,
         date_naissance: document.getElementById("dob").value,
-        pays: document.getElementById("pays").value,
-        ville: document.getElementById("ville").value,
-        quartier: document.getElementById("quartier").value,
-        profession: document.getElementById("profession").value,
         telephone: document.getElementById("tel").value,
         email: email
       }).then(() => {
@@ -146,11 +146,9 @@ window.login = function () {
 }
 
 window.loginWithGoogle = function () {
-  const provider = new GoogleAuthProvider();
   signInWithPopup(auth, provider)
     .then((result) => {
-      const user = result.user;
-      alert("Connecté avec Google : " + user.email);
+      alert("Connecté avec Google !");
     })
     .catch((error) => {
       alert(error.message);
