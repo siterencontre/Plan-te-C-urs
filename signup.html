@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inscription | Planètes Cœurs</title>
+  <style>
+    body {
+      background-color: #ffe6f0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    .form-container {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    input, button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #ff66a3;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    img.logo {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <img src="logo.png" class="logo" alt="Logo Planètes Cœurs">
+    <h2>Créer un compte</h2>
+    <input type="text" id="nom" placeholder="Nom" required />
+    <input type="text" id="prenom" placeholder="Prénom" required />
+    <input type="date" id="dateNaissance" placeholder="Date de naissance" required />
+    <input type="email" id="email" placeholder="Adresse e-mail" required />
+    <input type="password" id="password" placeholder="Mot de passe" required />
+    <input type="password" id="confirmPassword" placeholder="Confirmer le mot de passe" required />
+    <button onclick="signup()">S'inscrire</button>
+    <p id="message" style="color: red;"></p>
+  </div>
+
+  <script type="module" src="signup.js"></script>
+</body>
+</html>
