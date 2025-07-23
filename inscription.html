@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Inscription - Planète Cœurs</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDU5mzsxsDAa2tmq9fwQcf-DD7rNY9riU8",
+  authDomain: "planete-coeur.firebaseapp.com",
+  projectId: "planete-coeur",
+  storageBucket: "planete-coeur.firebasestorage.app",
+  messagingSenderId: "124827847585",
+  appId: "1:124827847585:web:86343c7823cbb7eaf5d9e0",
+  measurementId: "G-K8X3C6SV34"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.registerUser = async () => {
+  const firstName = document.getElementById('firstName').value;
+  const lastName = document.getElementById('lastName').value;
+  const dateOfBirth = document.getElementById('dateOfBirth').value;
+  const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+  const country = document.getElementById('country').value;
+  const city = document.getElementById('city').value;
+  const neighborhood = document.getElementById('neighborhood').value;
+  const profession = document.getElementById('profession').value;
+
+  try {
+    await addDoc(collection(db, "utilisateurs"), {
+      firstName,
+      lastName,
+      dateOfBirth,
+      email,
+      phone,
+      country,
+      city,
+      neighborhood,
+      profession,
+      profilePicture: "",
+      coverPhoto: "",
+      isVerified: false
+    });
+    alert("Inscription réussie !");
+  } catch (e) {
+    console.error("Erreur lors de l'inscription: ", e);
+    alert("Erreur lors de l'inscription.");
+  }
+};
+</script>
+</head>
+<body>
+  <h2>Inscription - Planète Cœurs</h2>
+  <form onsubmit="registerUser(); return false;">
+    <input type="text" id="firstName" placeholder="Prénom" required><br>
+    <input type="text" id="lastName" placeholder="Nom" required><br>
+    <input type="date" id="dateOfBirth" required><br>
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="tel" id="phone" placeholder="Téléphone" required><br>
+    <input type="text" id="country" placeholder="Pays" required><br>
+    <input type="text" id="city" placeholder="Ville" required><br>
+    <input type="text" id="neighborhood" placeholder="Quartier" required><br>
+    <input type="text" id="profession" placeholder="Profession" required><br>
+    <button type="submit">S'inscrire</button>
+  </form>
+</body>
+</html>
