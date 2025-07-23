@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planète Cœurs - Paramètres</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #fce4ec;
+  padding: 20px;
+}
+.container {
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+input, button {
+  width: 95%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+button {
+  background: #d6336c;
+  color: white;
+  border: none;
+}
+button:hover {
+  background: #b82e5c;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>⚙️ Paramètres du compte</h2>
+
+<p>Email : <span id="user-email"></span></p>
+
+<input type="text" id="nom" placeholder="Nom">
+<input type="text" id="ville" placeholder="Ville">
+<input type="text" id="pays" placeholder="Pays">
+<input type="text" id="profession" placeholder="Profession">
+
+<button onclick="updateProfile()">💾 Enregistrer les modifications</button>
+<button onclick="changePassword()">🔑 Changer le mot de passe</button>
+<button onclick="deleteAccount()">🗑️ Supprimer le compte</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth, updatePassword, deleteUser, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+  authDomain: "planetes-coeurs-site.firebaseapp.com",
+  projectId: "planetes-coeurs-site",
+  storageBucket: "planetes-coeurs-site.appspot.com",
+  messagingSenderId: "433372689765",
+  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+  measurementId: "G-SMZTEG955E"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    document.getElementById("user-email").textContent = user.email;
+    const docRef = doc(db, "utilisateurs", user.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      document.getElementById("nom").value = data.nom || "";
+      document.getElementById("ville").value = data.ville || "";
+      document.getElementById("pays").value = data.pays || "";
+      document.getElementById("profession").value = data.profession || "";
+    }
+  } else {
+    alert("Non connecté !");
+    window.location.href = "index.html";
+  }
+});
+
+window.updateProfile = async function () {
+  const user = auth.currentUser;
+  const uid = user.uid;
+  await updateDoc(doc(db, "utilisateurs", uid), {
+    nom: document.getElementById("nom").value,
+    ville: document.getElementById("ville").value,
+    pays: document.getElementById("pays").value,
+    profession: document.getElementById("profession").value
+  });
+  alert("Profil mis à jour !");
+}
+
+window.changePassword = function () {
+  const newPassword = prompt("Nouveau mot de passe :");
+  if (!newPassword) return;
+  updatePassword(auth.currentUser, newPassword)
+    .then(() => alert("Mot de passe changé"))
+    .catch((err) => alert(err.message));
+}
+
+window.deleteAccount = function () {
+  if (!confirm("Es-tu sûr de vouloir supprimer ton compte ?")) return;
+  deleteUser(auth.currentUser)
+    .then(() => {
+      alert("Compte supprimé.");
+      window.location.href = "index.html";
+    })
+    .catch(err => alert(err.message));
+}
+</script>
+
+</body>
+</html>
