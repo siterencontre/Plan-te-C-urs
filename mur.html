@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE html><html lang="fr">
 <head>
   <meta charset="UTF-8">
   <title>Planète Cœurs - Mur</title>
@@ -11,7 +10,7 @@
       background: #fff0f5;
     }
     header {
-      background: #ffffff;
+      background: #fff;
       padding: 15px;
       display: flex;
       justify-content: space-between;
@@ -30,17 +29,19 @@
       cursor: pointer;
     }
     .container {
-      max-width: 600px;
-      margin: 30px auto;
+      max-width: 800px;
+      margin: 20px auto;
       background: white;
-      border-radius: 15px;
+      border-radius: 10px;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .user-info, .story-bar, .new-post, .post, .settings {
+      margin-bottom: 20px;
     }
     .user-info {
       display: flex;
       align-items: center;
-      margin-bottom: 15px;
     }
     .user-info img {
       width: 50px;
@@ -48,99 +49,113 @@
       border-radius: 50%;
       margin-right: 15px;
     }
-    .post-box textarea {
-      width: 100%;
-      border: none;
-      resize: none;
-      font-size: 16px;
-      padding: 10px;
+    .story-bar {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+    }
+    .story {
+      width: 80px;
+      height: 120px;
+      background: #f8bbd0;
       border-radius: 10px;
-      background: #f9f9f9;
-      box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+      text-align: center;
+      padding: 5px;
+      font-size: 12px;
     }
-    .post-actions {
-      text-align: right;
-      margin-top: 10px;
+    textarea {
+      width: 100%;
+      padding: 10px;
+      resize: none;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
     }
-    .post-actions button {
+    .new-post button {
       background: #e91e63;
       color: white;
-      padding: 10px 20px;
+      padding: 8px 20px;
       border: none;
       border-radius: 20px;
+    }
+    .post {
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+    .post .author {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .post img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .post .actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 15px;
+      font-size: 16px;
       cursor: pointer;
     }
-    .post-actions button:hover {
-      background: #d81b60;
+    .settings {
+      text-align: center;
+    }
+    .settings button {
+      background: #ccc;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      margin: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-
-<header>
-  <div class="logo">Planète Cœurs 💖</div>
-  <div class="icons">
-    <span>🔔</span>
-    <span>💌</span>
-    <span>☰</span>
-  </div>
-</header>
-
-<div class="container">
-  <div class="user-info">
-    <img src="https://i.pravatar.cc/100?u=coeur" alt="profil">
-    <div>
-      <div id="username" style="font-weight:bold;">Utilisateur</div>
-      <div style="font-size: 12px; color: gray;">Connecté(e)</div>
+  <header>
+    <div class="logo">Planète Cœurs 💖</div>
+    <div class="icons">
+      <span>🔔</span>
+      <span>💌</span>
+      <span>⚙️</span>
     </div>
-  </div>
-
-  <div class="post-box">
-    <textarea rows="4" placeholder="À quoi penses-tu aujourd’hui ? 💭"></textarea>
-    <div class="post-actions">
-      <button>Publier 💖</button>
-    </div>
+  </header>  <div class="container"><div class="user-info">
+  <img src="https://i.pravatar.cc/100?u=user" alt="profil">
+  <div>
+    <div id="username">Utilisateur</div>
+    <div style="font-size:12px;color:gray;">En ligne</div>
   </div>
 </div>
 
-<script type="module">
-// Firebase import
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+<div class="story-bar">
+  <div class="story">Ma Story</div>
+  <div class="story">Rita</div>
+  <div class="story">Franck</div>
+</div>
 
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
-  authDomain: "planetes-coeurs-site.firebaseapp.com",
-  projectId: "planetes-coeurs-site",
-  storageBucket: "planetes-coeurs-site.appspot.com",
-  messagingSenderId: "433372689765",
-  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
-  measurementId: "G-SMZTEG955E"
-};
+<div class="new-post">
+  <textarea placeholder="Exprime-toi..."></textarea>
+  <button>Publier</button>
+</div>
 
-// Init Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+<div class="post">
+  <div class="author">Rita 💞</div>
+  <div>La vie est belle avec toi 💫</div>
+  <img src="https://placekitten.com/500/300" alt="publication">
+  <div class="actions">
+    <span>❤️ Like</span>
+    <span>💬 Commentaire</span>
+    <span>🔗 Partager</span>
+  </div>
+</div>
 
-// Afficher nom de l'utilisateur
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const uid = user.uid;
-    const docRef = doc(db, "utilisateurs", uid);
-    const docSnap = await getDoc(docRef);
+<div class="settings">
+  <h3>Paramètres du profil</h3>
+  <button>Modifier le profil</button>
+  <button>Changer la photo</button>
+  <button>Se déconnecter</button>
+</div>
 
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      document.getElementById("username").textContent = `${data.prenom} ${data.nom}`;
-    }
-  } else {
-    window.location.href = "index.html";
-  }
-});
-</script>
-
+  </div>
 </body>
 </html>
