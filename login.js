@@ -1,33 +1,40 @@
-// Importer Firebase
+// Importation des fonctions nécessaires depuis Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-// Configuration Firebase (prends les vraies infos de ton projet Firebase ici)
+// Configuration Firebase (tu l’as déjà fournie)
 const firebaseConfig = {
-  apiKey: "TA_CLE_API",
-  authDomain: "TON_PROJET.firebaseapp.com",
-  projectId: "TON_PROJET",
-  storageBucket: "TON_PROJET.appspot.com",
-  messagingSenderId: "TON_ID",
-  appId: "TON_APP_ID"
+  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+  authDomain: "planetes-coeurs-site.firebaseapp.com",
+  projectId: "planetes-coeurs-site",
+  storageBucket: "planetes-coeurs-site.appspot.com",
+  messagingSenderId: "433372689765",
+  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+  measurementId: "G-SMZTEG955E"
 };
 
-// Initialiser Firebase
+// Initialisation de Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Gestion de la connexion
-document.getElementById("login-form").addEventListener("submit", (e) => {
+// Gestionnaire de soumission du formulaire
+const loginForm = document.getElementById("loginForm");
+const errorMessage = document.getElementById("errorMessage");
+
+loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const email = document.getElementById("email").value.trim();
+
+  const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
+  // Connexion avec Firebase
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      alert("Connexion réussie !");
-      window.location.href = "home.html"; // page d'accueil après connexion
+      // Connexion réussie
+      const user = userCredential.user;
+      window.location.href = "dashboard.html"; // Redirection après connexion
     })
     .catch((error) => {
-      alert("Erreur : " + error.message);
+      errorMessage.textContent = "Adresse email ou mot de passe incorrect.";
     });
 });
