@@ -2,114 +2,71 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Connexion - Planète Cœurs</title>
+  <title>Connexion - Planète des Cœurs</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background: #ffeef5;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: sans-serif;
+      background-color: #ffe6f0;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      padding-top: 50px;
     }
-    .login-container {
-      background-color: #fff;
-      padding: 40px;
+    .card {
+      background-color: white;
+      padding: 30px;
       border-radius: 15px;
-      box-shadow: 0 0 25px rgba(233, 30, 99, 0.2);
-      width: 350px;
+      box-shadow: 0 0 10px rgba(255, 105, 180, 0.2);
+      width: 300px;
       text-align: center;
     }
-    .logo {
-      width: 80px;
-      margin-bottom: 20px;
+    img {
+      width: 100px;
+      margin-bottom: 15px;
     }
-    h2 {
-      margin-bottom: 25px;
-      color: #e91e63;
-    }
-    input {
+    input, button {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       margin: 10px 0;
-      border: 1px solid #ccc;
       border-radius: 8px;
-      box-sizing: border-box;
+      border: 1px solid #ccc;
     }
     button {
-      background-color: #e91e63;
+      background-color: #ff69b4;
       color: white;
-      padding: 12px;
-      width: 100%;
       border: none;
-      border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
     }
     button:hover {
-      background-color: #d81b60;
+      background-color: #e7549b;
     }
-    .forgot {
-      margin-top: 10px;
-      text-align: right;
-    }
-    .forgot a {
-      color: #e91e63;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    .forgot a:hover {
-      text-decoration: underline;
+    .link {
+      color: #ff69b4;
+      font-size: 0.9em;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <div class="login-container">
-    <img src="logo.png" alt="Logo Planète Cœurs" class="logo" />
+  <div class="card">
+    <img src="logo.png" alt="Logo Planète des Cœurs" />
     <h2>Connexion</h2>
-    <input type="email" id="email" placeholder="Adresse e-mail" required />
-    <input type="password" id="password" placeholder="Mot de passe" required />
-    <button onclick="login()">Se connecter</button>
-    <div class="forgot">
-      <a href="reset.html">Mot de passe oublié ?</a>
-    </div>
+
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Adresse email" required />
+      <input type="password" id="password" placeholder="Mot de passe" required />
+      <button type="submit">Se connecter</button>
+    </form>
+
+    <div class="link" id="resetBtn">Mot de passe oublié ?</div>
+    <hr />
+    <button id="googleBtn">Continuer avec Google</button>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
-      authDomain: "planetes-coeurs-site.firebaseapp.com",
-      projectId: "planetes-coeurs-site",
-      storageBucket: "planetes-coeurs-site.appspot.com",
-      messagingSenderId: "433372689765",
-      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("Connexion réussie !");
-          window.location.href = "dashboard.html"; // Rediriger vers une page sécurisée après connexion
-        })
-        .catch((error) => {
-          alert("Erreur : " + error.message);
-        });
-    }
-  </script>
+  <!-- SCRIPT FIREBASE ICI — je vais te le donner après -->
+  <script type="module" src="firebase-login.js"></script>
 
 </body>
 </html>
