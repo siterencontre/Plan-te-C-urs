@@ -1,120 +1,125 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE html><html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Créer un compte - Planète Cœurs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Créer un compte - Planète Cœur</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
   <style>
     body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #f8c6d8, #f9e4ec);
       margin: 0;
       padding: 0;
-      background: #fff0f5;
-      font-family: 'Segoe UI', sans-serif;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       height: 100vh;
-    }
-    .register-container {
-      background-color: #fff;
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 0 25px rgba(233, 30, 99, 0.2);
-      width: 400px;
-      text-align: center;
-    }
-    .logo {
-      width: 80px;
-      margin-bottom: 20px;
-    }
-    h2 {
-      margin-bottom: 25px;
-      color: #e91e63;
-    }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #e91e63;
-      color: white;
-      padding: 12px;
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    button:hover {
-      background-color: #d81b60;
-    }
-    .link {
-      margin-top: 10px;
-    }
-    .link a {
-      color: #e91e63;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    .link a:hover {
-      text-decoration: underline;
-    }
+    }.container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #e91e63;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+button {
+  background-color: #e91e63;
+  color: white;
+  padding: 12px;
+  border: none;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #d81b60;
+}
+
+.login-link {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #e91e63;
+  text-decoration: none;
+}
+
   </style>
 </head>
 <body>
-
-  <div class="register-container">
-    <img src="logo.png" alt="Logo Planète Cœurs" class="logo" />
+  <div class="container">
+    <img src="logo.png" alt="Logo Planète Cœur" class="logo" />
     <h2>Créer un compte</h2>
-    <input type="text" id="name" placeholder="Nom complet" required />
-    <input type="email" id="email" placeholder="Adresse e-mail" required />
-    <input type="password" id="password" placeholder="Mot de passe" required />
-    <button onclick="register()">S'inscrire</button>
-    <div class="link">
-      <a href="login.html">Déjà inscrit ? Se connecter</a>
+    <form id="registerForm">
+      <input type="text" placeholder="Nom" id="nom" required />
+      <input type="text" placeholder="Prénom" id="prenom" required />
+      <input type="date" id="dob" required />
+      <input type="email" placeholder="Adresse e-mail" id="email" required />
+      <input type="password" placeholder="Mot de passe" id="password" required />
+      <input type="password" placeholder="Confirmez le mot de passe" id="confirmPassword" required />
+      <button type="submit">S'inscrire</button>
+    </form>
+    <div class="login-link">
+      Vous avez déjà un compte ? <a href="login.html">Se connecter</a>
     </div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
+  </div>  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
-      authDomain: "planetes-coeurs-site.firebaseapp.com",
-      projectId: "planetes-coeurs-site",
-      storageBucket: "planetes-coeurs-site.appspot.com",
-      messagingSenderId: "433372689765",
-      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    function register() {
-      const name = document.getElementById("name").value;
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
 
-      createUserWithEmailAndPassword(auth, email, password)
+      if (password !== confirmPassword) {
+        alert("Les mots de passe ne correspondent pas.");
+        return;
+      }
+
+      auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-          updateProfile(auth.currentUser, {
-            displayName: name
-          }).then(() => {
-            alert("Compte créé avec succès !");
-            window.location.href = "dashboard.html";
-          });
+          alert("Compte créé avec succès !");
+          // Redirection ou autre action ici
         })
         .catch((error) => {
           alert("Erreur : " + error.message);
         });
-    }
-  </script>
-
-</body>
+    });
+  </script></body>
 </html>
