@@ -1,7 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Mur - Planète Cœurs</title>
+<style>
+body { font-family: Arial, sans-serif; background: #fff0f5; margin: 0; padding: 0; }
+header { background: white; padding: 10px; text-align: center; font-size: 24px; color: #e91e63; }
+#publications { max-width: 600px; margin: 20px auto; padding: 10px; }
+.publication { background: white; margin-bottom: 10px; padding: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+.publication .auteur { font-weight: bold; }
+.publication .date { font-size: 12px; color: gray; }
+</style>
+</head>
+<body>
+
+<header>Planète Cœurs 💖</header>
+<div id="publications">Chargement des publications…</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
@@ -9,57 +27,35 @@ const firebaseConfig = {
   projectId: "planetes-coeurs-site",
   storageBucket: "planetes-coeurs-site.appspot.com",
   messagingSenderId: "433372689765",
-  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c"
+  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+  measurementId: "G-SMZTEG955E"
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-const textarea = document.querySelector(".new-post textarea");
-const publierBtn = document.querySelector(".new-post button");
-const container = document.querySelector(".container");
+const publicationsDiv = document.getElementById("publications");
 
-function afficherPost(post) {
-  const div = document.createElement("div");
-  div.className = "post";
-  div.innerHTML = `
-    <div class="author">${post.auteur}</div>
-    <div>${post.contenu}</div>
-    <div style="font-size:12px;color:gray;">${new Date(post.timestamp?.seconds * 1000).toLocaleString()}</div>
-    <div class="actions">
-      <span>❤️ ${post.likes || 0} Like</span>
-      <span>💬 Commentaire</span>
-      <span>🔗 Partager</span>
-    </div>
-  `;
-  container.appendChild(div);
-}
+const q = query(
+  collection(db, "publications"),
+  orderBy("timestamp", "desc")
+);
 
-publierBtn.addEventListener("click", async () => {
-  const contenu = textarea.value.trim();
-  if (!contenu) return alert("Écris quelque chose !");
-  await addDoc(collection(db, "publications"), {
-    auteur: "Utilisateur", // plus tard on mettra le vrai nom
-    contenu,
-    timestamp: serverTimestamp(),
-    likes: 0
+onSnapshot(q, (querySnapshot) => {
+  publicationsDiv.innerHTML = ""; // on vide
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    const pub = document.createElement("div");
+    pub.className = "publication";
+    pub.innerHTML = `
+      <div class="auteur">${data.auteur || "Anonyme"}</div>
+      <div class="date">${data.timestamp?.toDate().toLocaleString() || ""}</div>
+      <div class="contenu">${data.contenu}</div>
+    `;
+    publicationsDiv.appendChild(pub);
   });
-  textarea.value = "";
-});
-
-const q = query(collection(db, "publications"), orderBy("timestamp", "desc"));
-onSnapshot(q, snapshot => {
-  document.querySelectorAll(".post").forEach(e => e.remove());
-  snapshot.forEach(doc => afficherPost(doc.data()));
-});
-
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    alert("Vous devez être connecté !");
-    window.location.href = "index.html";
-  } else {
-    document.getElementById("username").textContent = user.email;
-  }
 });
 </script>
+
+</body>
+</html>
