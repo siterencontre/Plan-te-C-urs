@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planète Cœurs - Messages 💌</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #fce4ec;
+  padding: 20px;
+}
+#chat {
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+.message {
+  margin: 5px 0;
+}
+.sender {
+  font-weight: bold;
+  color: #d6336c;
+}
+</style>
+</head>
+<body>
+
+<h1>💖 Messages Privés</h1>
+
+<div id="chat">
+  <input type="text" id="receiver" placeholder="Email du destinataire"><br>
+  <div id="messages"></div>
+  <input type="text" id="msg" placeholder="Votre message">
+  <button onclick="sendMessage()">Envoyer</button>
+</div>
+
+<script type="module">
+// Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+  authDomain: "planetes-coeurs-site.firebaseapp.com",
+  projectId: "planetes-coeurs-site",
+  storageBucket: "planetes-coeurs-site.appspot.com",
+  messagingSenderId: "433372689765",
+  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+  measurementId: "G-SMZTEG955E"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const currentUser = prompt("Ton email pour cette session ?");
+const receiverInput = document.getElementById("receiver");
+const msgInput = document.getElementById("msg");
+const messagesDiv = document.getElementById("messages");
+
+function loadMessages() {
+  const receiver = receiverInput.value.trim();
+  if (!receiver) return;
+
+  const chatQuery = query(
+    collection(db, "messages"),
+    where("participants", "array-contains", currentUser),
+    orderBy("timestamp")
+  );
+
+  onSnapshot(chatQuery, snapshot => {
+    messagesDiv.innerHTML = "";
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (
+        (data.sender === currentUser && data.receiver === receiver) ||
+        (data.sender === receiver && data.receiver === currentUser)
+      ) {
+        const div = document.createElement("div");
+        div.className = "message";
+        div.innerHTML = `<span class="sender">${data.sender} :</span> ${data.text}`;
+        messagesDiv.appendChild(div);
+      }
+    });
+  });
+}
+
+window.sendMessage = async function () {
+  const receiver = receiverInput.value.trim();
+  const text = msgInput.value.trim();
+  if (!receiver || !text) return;
+
+  await addDoc(collection(db, "messages"), {
+    sender: currentUser,
+    receiver: receiver,
+    text: text,
+    timestamp: new Date(),
+    participants: [currentUser, receiver]
+  });
+  msgInput.value = "";
+};
+
+receiverInput.addEventListener("change", loadMessages);
+</script>
+
+</body>
+</html>
