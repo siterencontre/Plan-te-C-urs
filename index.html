@@ -49,11 +49,13 @@ a {
 
 <div class="container">
   <h1>Planète Cœurs 💖</h1>
+  <img src="logo.png" alt="Logo Planète Cœurs" style="width: 100px; margin: 10px auto; display:block;">
   <p>Bienvenue ! Connectez-vous ou créez votre compte</p>
 
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Mot de passe">
   <button onclick="login()">Connexion</button>
+  <button onclick="loginWithGoogle()" style="background-color:#4285F4">Connexion avec Google</button>
 
   <p>Pas encore inscrit ? <a href="#" onclick="showSignup()">Créer un compte</a></p>
 
@@ -74,9 +76,8 @@ a {
 </div>
 
 <script type="module">
-// Importer Firebase depuis le CDN
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -138,6 +139,18 @@ window.login = function () {
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("Connecté avec succès !");
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
+}
+
+window.loginWithGoogle = function () {
+  const provider = new GoogleAuthProvider();
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      alert("Connecté avec Google : " + user.email);
     })
     .catch((error) => {
       alert(error.message);
