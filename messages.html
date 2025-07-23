@@ -2,27 +2,153 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Messages - Planète Cœurs</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messagerie - Planète Cœurs</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ffe6f2;
+  text-align: center;
+  padding: 20px;
+}
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+h1 {
+  color: #d6336c;
+}
+select, input, button {
+  width: 90%;
+  margin: 8px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+button {
+  background-color: #d6336c;
+  color: white;
+  border: none;
+}
+button:hover {
+  background-color: #b82e5c;
+}
+.message {
+  text-align: left;
+  margin: 10px;
+  background: #f9f9f9;
+  padding: 8px;
+  border-radius: 5px;
+}
+</style>
 </head>
 <body>
-<header>
-<h1>💖 Planète Cœurs 💖</h1>
-<nav>
-<a href="index.html">Accueil</a>
-<a href="messages.html">Messages</a>
-<a href="statut.html">Statut</a>
-<a href="recherche.html">Recherche d'ami</a>
-<a href="amis.html">Amis</a>
-<a href="profil.html">Profil</a>
-<a href="index.html">Déconnexion</a>
-</nav>
-</header>
-<main>
-<h2>Messages</h2>
-<div id="conversation">
-<p>Sélectionnez un ami pour commencer à discuter.</p>
+
+<div class="container">
+  <h1>Messagerie 📩</h1>
+
+  <select id="friend-list">
+    <option value="">Sélectionnez un ami pour discuter</option>
+  </select>
+
+  <div id="chat-box"></div>
+
+  <input type="text" id="message-input" placeholder="Écrivez votre message...">
+  <button onclick="sendMessage()">Envoyer</button>
 </div>
-</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDU5mzsxsDAa2tmq9fwQcf-DD7rNY9riU8",
+  authDomain: "planete-coeur.firebaseapp.com",
+  projectId: "planete-coeur",
+  storageBucket: "planete-coeur.firebasestorage.app",
+  messagingSenderId: "124827847585",
+  appId: "1:124827847585:web:64b56079fcafdd61f5d9e0",
+  measurementId: "G-2SBTXBB67B"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+let selectedFriend = null;
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    loadFriends();
+  } else {
+    alert("Vous devez être connecté !");
+    window.location.href = "index.html";
+  }
+});
+
+async function loadFriends() {
+  const friendList = document.getElementById("friend-list");
+  const snapshot = await getDocs(collection(db, "users"));
+  snapshot.forEach((doc) => {
+    if (doc.id !== currentUser.uid) {
+      const opt = document.createElement("option");
+      opt.value = doc.id;
+      opt.textContent = doc.data().nom + " " + doc.data().prenom;
+      friendList.appendChild(opt);
+    }
+  });
+}
+
+document.getElementById("friend-list").addEventListener("change", (e) => {
+  selectedFriend = e.target.value;
+  loadMessages();
+});
+
+async function loadMessages() {
+  const chatBox = document.getElementById("chat-box");
+  chatBox.innerHTML = "";
+  if (!selectedFriend) return;
+
+  const chatId = [currentUser.uid, selectedFriend].sort().join("_");
+  const q = query(collection(db, "chats", chatId, "messages"), orderBy("timestamp", "asc"));
+  onSnapshot(q, (snapshot) => {
+    chatBox.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const msg = doc.data();
+      const div = document.createElement("div");
+      div.className = "message";
+      div.textContent = msg.sender === currentUser.uid ? "Moi: " + msg.text : "Ami: " + msg.text;
+      chatBox.appendChild(div);
+    });
+  });
+}
+
+window.sendMessage = async () => {
+  if (!selectedFriend) {
+    alert("Veuillez choisir un ami.");
+    return;
+  }
+  const input = document.getElementById("message-input");
+  const text = input.value.trim();
+  if (!text) return;
+
+  const chatId = [currentUser.uid, selectedFriend].sort().join("_");
+  await addDoc(collection(db, "chats", chatId, "messages"), {
+    sender: currentUser.uid,
+    text,
+    timestamp: Date.now()
+  });
+
+  input.value = "";
+};
+</script>
+
 </body>
 </html>
