@@ -3,75 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Connexion - Planète Africa</title>
+  <title>Connexion - Planète Cœurs</title>
   <style>
     body {
       margin: 0;
+      padding: 0;
+      background: #ffeef5;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #ffb6c1, #ffe4e1);
-      height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-
     .login-container {
-      background: #fff;
-      padding: 40px 30px;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(233, 30, 99, 0.2);
+      width: 350px;
       text-align: center;
     }
-
     .logo {
-      width: 100px;
+      width: 80px;
       margin-bottom: 20px;
     }
-
     h2 {
       margin-bottom: 25px;
       color: #e91e63;
     }
-
     input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
       border: 1px solid #ccc;
       border-radius: 8px;
-      font-size: 16px;
+      box-sizing: border-box;
     }
-
     button {
-      width: 100%;
-      padding: 12px;
-      background: #e91e63;
+      background-color: #e91e63;
       color: white;
-      font-weight: bold;
+      padding: 12px;
+      width: 100%;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
+      margin-top: 10px;
     }
-
     button:hover {
-      background: #d81b60;
+      background-color: #d81b60;
+    }
+    .forgot {
+      margin-top: 10px;
+      text-align: right;
+    }
+    .forgot a {
+      color: #e91e63;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .forgot a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
   <div class="login-container">
-    <img src="logo.png" alt="Logo Planète Africa" class="logo" />
-    <h2>Se connecter</h2>
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Adresse e-mail" required />
-      <input type="password" id="password" placeholder="Mot de passe" required />
-      <button type="submit">Connexion</button>
-    </form>
+    <img src="logo.png" alt="Logo Planète Cœurs" class="logo" />
+    <h2>Connexion</h2>
+    <input type="email" id="email" placeholder="Adresse e-mail" required />
+    <input type="password" id="password" placeholder="Mot de passe" required />
+    <button onclick="login()">Se connecter</button>
+    <div class="forgot">
+      <a href="reset.html">Mot de passe oublié ?</a>
+    </div>
   </div>
 
   <script type="module">
@@ -84,27 +90,26 @@
       projectId: "planetes-coeurs-site",
       storageBucket: "planetes-coeurs-site.appspot.com",
       messagingSenderId: "433372689765",
-      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
-      measurementId: "G-SMZTEG955E"
+      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const loginForm = document.getElementById("loginForm");
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    function login() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        alert("Connexion réussie !");
-        window.location.href = "accueil.html";
-      } catch (error) {
-        alert("Erreur : " + error.message);
-      }
-    });
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Connexion réussie !");
+          window.location.href = "dashboard.html"; // Rediriger vers une page sécurisée après connexion
+        })
+        .catch((error) => {
+          alert("Erreur : " + error.message);
+        });
+    }
   </script>
+
 </body>
 </html>
