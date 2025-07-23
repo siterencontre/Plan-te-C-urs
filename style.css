@@ -33,3 +33,23 @@ button:hover {
 a {
   color: #ff66a3;
 }
+.google-btn {
+  background-color: white;
+  color: #444;
+  border: 1px solid #ccc;
+  font-weight: bold;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 8px;
+  display: block;
+  width: 100%;
+}
+
+.google-btn:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+hr {
+  margin: 20px 0;
+}
