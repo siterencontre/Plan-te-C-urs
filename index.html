@@ -48,7 +48,7 @@ a {
 
 <div class="container">
   <h1>Planète Cœurs 💖</h1>
-  <p>Connectez-vous ou créez votre compte</p>
+  <p>Connectez-vous ou créez votre compte pour commencer</p>
 
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Mot de passe">
@@ -60,20 +60,23 @@ a {
     <input type="text" id="nom" placeholder="Nom">
     <input type="text" id="prenom" placeholder="Prénom">
     <input type="date" id="dob" placeholder="Date de naissance">
+    <input type="text" id="pays" placeholder="Pays">
+    <input type="text" id="ville" placeholder="Ville">
+    <input type="text" id="quartier" placeholder="Quartier">
+    <input type="text" id="profession" placeholder="Profession">
+    <input type="text" id="tel" placeholder="Téléphone">
     <input type="email" id="signup-email" placeholder="Email">
     <input type="password" id="signup-password" placeholder="Mot de passe">
+    <input type="password" id="confirm-password" placeholder="Confirmer le mot de passe">
     <button onclick="signup()">Créer mon compte</button>
   </div>
-
-  <hr>
-
-  <p>Ou connectez-vous avec :</p>
-  <button onclick="googleLogin()">Google</button>
 </div>
 
 <script type="module">
+// Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDU5mzsxsDAa2tmq9fwQcf-DD7rNY9riU8",
@@ -87,6 +90,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 window.showSignup = function() {
   document.getElementById("signup").style.display = "block";
@@ -95,15 +99,36 @@ window.showSignup = function() {
 window.signup = function() {
   const email = document.getElementById("signup-email").value;
   const password = document.getElementById("signup-password").value;
+  const confirm = document.getElementById("confirm-password").value;
 
-  if (!email || !password) {
-    alert("Email et mot de passe sont obligatoires.");
+  if (password !== confirm) {
+    alert("Les mots de passe ne correspondent pas !");
     return;
   }
 
   createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+
+      // Enregistrer les infos dans Firestore
+      return setDoc(doc(db, "utilisateurs", user.uid), {
+        nom: document.getElementById("nom").value,
+        prenom: document.getElementById("prenom").value,
+        date_naissance: document.getElementById("dob").value,
+        pays: document.getElementById("pays").value,
+        ville: document.getElementById("ville").value,
+        quartier: document.getElementById("quartier").value,
+        profession: document.getElementById("profession").value,
+        telephone: document.getElementById("tel").value,
+        email: email,
+        photo_profil: "",
+        photo_couverture: "",
+        badge: ""
+      });
+    })
     .then(() => {
-      alert("Compte créé avec succès !");
+      alert("Compte créé et enregistré !");
+      location.reload();
     })
     .catch((error) => {
       alert(error.message);
@@ -116,18 +141,8 @@ window.login = function() {
 
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
-      alert("Connecté avec succès !");
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-}
-
-window.googleLogin = function() {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
-    .then(() => {
-      alert("Connecté avec Google !");
+      alert("Connecté avec succès !");
+      // Ici, tu peux rediriger l’utilisateur vers une autre page si tu veux.
     })
     .catch((error) => {
       alert(error.message);
