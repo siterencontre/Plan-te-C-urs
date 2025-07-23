@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publications - Planète Cœurs</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ffe6f2;
+  text-align: center;
+  padding: 20px;
+}
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+h1 {
+  color: #d6336c;
+}
+textarea, input, button {
+  width: 90%;
+  margin: 8px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+button {
+  background-color: #d6336c;
+  color: white;
+  border: none;
+}
+button:hover {
+  background-color: #b82e5c;
+}
+.post {
+  border-top: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+.post img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+.actions {
+  margin-top: 5px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Publications 💌</h1>
+
+  <textarea id="post-text" placeholder="Écrivez votre annonce ici..."></textarea><br>
+  <input type="file" id="post-image"><br>
+  <button onclick="publish()">Publier</button>
+
+  <div id="posts"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDU5mzsxsDAa2tmq9fwQcf-DD7rNY9riU8",
+  authDomain: "planete-coeur.firebaseapp.com",
+  projectId: "planete-coeur",
+  storageBucket: "planete-coeur.firebasestorage.app",
+  messagingSenderId: "124827847585",
+  appId: "1:124827847585:web:64b56079fcafdd61f5d9e0",
+  measurementId: "G-2SBTXBB67B"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    loadPosts();
+  } else {
+    alert("Vous devez être connecté !");
+    window.location.href = "index.html";
+  }
+});
+
+window.publish = async () => {
+  const text = document.getElementById("post-text").value.trim();
+  const imgFile = document.getElementById("post-image").files[0];
+
+  if (!text && !imgFile) {
+    alert("Veuillez écrire quelque chose ou ajouter une image.");
+    return;
+  }
+
+  const postData = {
+    uid: currentUser.uid,
+    text,
+    timestamp: Date.now(),
+    likes: 0,
+    comments: 0
+  };
+
+  const docRef = await addDoc(collection(db, "posts"), postData);
+
+  if (imgFile) {
+    alert("(🔒 Fonction d’image à implémenter plus tard. Pour l’instant, seule la publication texte fonctionne.)");
+  }
+
+  document.getElementById("post-text").value = "";
+  document.getElementById("post-image").value = "";
+};
+
+function loadPosts() {
+  const postsContainer = document.getElementById("posts");
+  const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+  onSnapshot(q, (snapshot) => {
+    postsContainer.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const post = doc.data();
+      const div = document.createElement("div");
+      div.className = "post";
+      div.innerHTML = `
+        <p>${post.text}</p>
+        <div class="actions">
+          ❤️ ${post.likes} | 💬 ${post.comments}
+        </div>
+      `;
+      postsContainer.appendChild(div);
+    });
+  });
+}
+</script>
+
+</body>
+</html>
