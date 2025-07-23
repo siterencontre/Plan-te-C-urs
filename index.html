@@ -7,37 +7,33 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ffe6f0, #ffc2d1);
+  background-color: #ffe6f2;
   color: #333;
   text-align: center;
-  margin: 0;
-  padding: 0;
+  padding: 20px;
 }
 .container {
   max-width: 400px;
-  margin: 50px auto;
+  margin: auto;
   background: #fff;
   border-radius: 10px;
-  padding: 30px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 h1 {
   color: #d6336c;
 }
 input, button {
-  width: 95%;
-  padding: 12px;
-  margin: 10px 0;
+  width: 90%;
+  padding: 10px;
+  margin: 8px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 16px;
 }
 button {
   background-color: #d6336c;
   color: white;
   border: none;
-  cursor: pointer;
-  font-size: 16px;
 }
 button:hover {
   background-color: #b82e5c;
@@ -45,34 +41,24 @@ button:hover {
 a {
   color: #d6336c;
   text-decoration: none;
-  font-size: 14px;
-}
-.logo {
-  max-width: 120px;
-  margin: 0 auto 20px;
-}
-#signup {
-  display: none;
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <img src="logo.png" alt="Planète Cœurs" class="logo">
   <h1>Planète Cœurs 💖</h1>
+  <p>Connectez-vous ou créez votre compte</p>
 
-  <p>Connectez-vous pour continuer</p>
-
-  <input type="email" id="email" placeholder="Email ou téléphone">
+  <!-- Connexion -->
+  <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Mot de passe">
   <button onclick="login()">Connexion</button>
 
-  <p><a href="#" onclick="showSignup()">Pas encore inscrit ? Créez un compte</a></p>
-  <p><a href="#" onclick="alert('Veuillez contacter le support pour réinitialiser votre mot de passe.');">Mot de passe oublié ?</a></p>
+  <p>Pas encore inscrit ? <a href="#" onclick="showSignup()">Créer un compte</a></p>
 
-  <div id="signup">
-    <h2>Créer votre compte</h2>
+  <!-- Inscription -->
+  <div id="signup" style="display:none;">
     <input type="text" id="nom" placeholder="Nom">
     <input type="text" id="prenom" placeholder="Prénom">
     <input type="date" id="dob" placeholder="Date de naissance">
@@ -82,7 +68,6 @@ a {
     <input type="text" id="profession" placeholder="Profession">
     <input type="text" id="tel" placeholder="Téléphone">
     <input type="email" id="signup-email" placeholder="Email">
-    <input type="file" id="photo" placeholder="Photo de profil">
     <input type="password" id="signup-password" placeholder="Mot de passe">
     <input type="password" id="confirm-password" placeholder="Confirmer le mot de passe">
     <button onclick="signup()">Créer mon compte</button>
@@ -93,12 +78,13 @@ a {
 // Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDU5mzsxsDAa2tmq9fwQcf-DD7rNY9riU8",
   authDomain: "planete-coeur.firebaseapp.com",
   projectId: "planete-coeur",
-  storageBucket: "planete-coeur.appspot.com",
+  storageBucket: "planete-coeur.firebasestorage.app",
   messagingSenderId: "124827847585",
   appId: "1:124827847585:web:64b56079fcafdd61f5d9e0",
   measurementId: "G-2SBTXBB67B"
@@ -106,12 +92,13 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 window.showSignup = function() {
   document.getElementById("signup").style.display = "block";
 }
 
-window.signup = function() {
+window.signup = async function() {
   const email = document.getElementById("signup-email").value;
   const password = document.getElementById("signup-password").value;
   const confirm = document.getElementById("confirm-password").value;
@@ -121,14 +108,27 @@ window.signup = function() {
     return;
   }
 
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("Compte créé avec succès !");
-      window.location.href = "profile.html";
-    })
-    .catch((error) => {
-      alert("Erreur : " + error.message);
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Enregistrer infos dans Firestore
+    await setDoc(doc(db, "utilisateurs", user.uid), {
+      nom: document.getElementById("nom").value,
+      prenom: document.getElementById("prenom").value,
+      date_naissance: document.getElementById("dob").value,
+      pays: document.getElementById("pays").value,
+      ville: document.getElementById("ville").value,
+      quartier: document.getElementById("quartier").value,
+      profession: document.getElementById("profession").value,
+      telephone: document.getElementById("tel").value,
+      email: email
     });
+
+    alert("Compte créé avec succès !");
+  } catch (error) {
+    alert(error.message);
+  }
 }
 
 window.login = function() {
@@ -138,10 +138,9 @@ window.login = function() {
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("Connecté avec succès !");
-      window.location.href = "profile.html";
     })
     .catch((error) => {
-      alert("Erreur : " + error.message);
+      alert(error.message);
     });
 }
 </script>
