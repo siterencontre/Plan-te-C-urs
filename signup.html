@@ -2,58 +2,73 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inscription | Planètes Cœurs</title>
-  <style>
-    body {
-      background-color: #ffe6f0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-    }
-    .form-container {
-      background: white;
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-    input, button {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #ff66a3;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    img.logo {
-      width: 100px;
-      margin-bottom: 20px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inscription</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <div class="form-container">
-    <img src="logo.png" class="logo" alt="Logo Planètes Cœurs">
+  <div class="container">
     <h2>Créer un compte</h2>
-    <input type="text" id="nom" placeholder="Nom" required />
-    <input type="text" id="prenom" placeholder="Prénom" required />
-    <input type="date" id="dateNaissance" placeholder="Date de naissance" required />
-    <input type="email" id="email" placeholder="Adresse e-mail" required />
-    <input type="password" id="password" placeholder="Mot de passe" required />
-    <input type="password" id="confirmPassword" placeholder="Confirmer le mot de passe" required />
-    <button onclick="signup()">S'inscrire</button>
-    <p id="message" style="color: red;"></p>
+    <form id="signup-form">
+      <input type="text" id="name" placeholder="Nom complet" required />
+      <input type="email" id="email" placeholder="Adresse e-mail" required />
+      <input type="password" id="password" placeholder="Mot de passe" required />
+      <button type="submit">S'inscrire</button>
+    </form>
+    <p>Vous avez déjà un compte ? <a href="login.html">Se connecter</a></p>
   </div>
 
-  <script type="module" src="signup.js"></script>
+  <!-- Script Firebase + inscription -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "TON_API_KEY",
+      authDomain: "TON_PROJET.firebaseapp.com",
+      projectId: "TON_PROJET",
+      storageBucket: "planetes-coeurs-site.appspot.com",
+      messagingSenderId: "TON_ID",
+      appId: "TON_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Formulaire d’inscription
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await setDoc(doc(db, "utilisateurs", user.uid), {
+          uid: user.uid,
+          nom: name,
+          email: email,
+          dateInscription: new Date()
+        });
+
+        alert("Inscription réussie !");
+        window.location.href = "login.html";
+      } catch (error) {
+        alert("Erreur : " + error.message);
+      }
+    });
+  </script>
 </body>
 </html>
