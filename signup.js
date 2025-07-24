@@ -11,17 +11,18 @@ import {
   set
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-// CONFIGURATION FIREBASE
+// CONFIGURATION FIREBASE CORRECTE
 const firebaseConfig = {
-  apiKey: "TON_API_KEY",
-  authDomain: "TON_DOMAINE.firebaseapp.com",
-  projectId: "TON_ID",
+  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+  authDomain: "planetes-coeurs-site.firebaseapp.com",
+  projectId: "planetes-coeurs-site",
   storageBucket: "planetes-coeurs-site.appspot.com",
-  messagingSenderId: "TON_SENDER_ID",
-  appId: "TON_APP_ID",
+  messagingSenderId: "433372689765",
+  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
   databaseURL: "https://planetes-coeurs-site-default-rtdb.firebaseio.com/"
 };
 
+// Initialiser Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
@@ -44,7 +45,7 @@ document.getElementById("register-form").addEventListener("submit", (e) => {
     .then((userCredential) => {
       const user = userCredential.user;
 
-      // Enregistrer les données utilisateur dans la base de données
+      // Enregistrer les infos dans la base de données
       set(ref(database, "users/" + user.uid), {
         email: email,
         prenom: prenom,
