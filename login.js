@@ -1,6 +1,10 @@
 // login.js
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
@@ -15,7 +19,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-document.getElementById("login-form").addEventListener("submit", function (e) {
+// Quand on clique sur le bouton de connexion
+document.getElementById("loginForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
   const email = document.getElementById("email").value;
@@ -23,13 +28,13 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
 
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // Connexion réussie
-      alert("Bienvenue sur Planète Cœurs 💖");
-      // Rediriger vers le mur
+      // ✅ Connexion réussie
+      alert("Connexion réussie !");
+      // 🔁 Redirection automatique vers le mur
       window.location.href = "mur.html";
     })
     .catch((error) => {
-      const errorMessage = error.message;
-      alert("Erreur : " + errorMessage);
+      // ❌ Erreur de connexion
+      alert("Erreur : " + error.message);
     });
 });
