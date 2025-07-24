@@ -1,50 +1,61 @@
-// Configuration Firebase déjà initialisée dans index.html
+// signup.js
 
-// Références Firebase
-const auth = firebase.auth();
-const db = firebase.firestore();
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getDatabase,
+  ref,
+  set
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-// Gestion de l'inscription
-document.getElementById("signupForm").addEventListener("submit", function (e) {
+// CONFIGURATION FIREBASE
+const firebaseConfig = {
+  apiKey: "TON_API_KEY",
+  authDomain: "TON_DOMAINE.firebaseapp.com",
+  projectId: "TON_ID",
+  storageBucket: "planetes-coeurs-site.appspot.com",
+  messagingSenderId: "TON_SENDER_ID",
+  appId: "TON_APP_ID",
+  databaseURL: "https://planetes-coeurs-site-default-rtdb.firebaseio.com/"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app);
+
+document.getElementById("register-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const email = document.getElementById("email").value.trim();
+  const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-  const name = document.getElementById("name").value.trim();
-  const dob = document.getElementById("dob").value;
-
-  if (!email || !password || !confirmPassword || !name || !dob) {
-    alert("Tous les champs sont obligatoires.");
-    return;
-  }
+  const confirmPassword = document.getElementById("confirm-password").value;
+  const prenom = document.getElementById("prenom").value;
+  const naissance = document.getElementById("naissance").value;
 
   if (password !== confirmPassword) {
-    alert("Les mots de passe ne correspondent pas.");
+    alert("Les mots de passe ne correspondent pas !");
     return;
   }
 
-  // Création de l'utilisateur
-  auth.createUserWithEmailAndPassword(email, password)
+  createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
 
-      // Ajout des infos dans Firestore
-      return db.collection("users").doc(user.uid).set({
-        name: name,
+      // Enregistrer les données utilisateur dans la base de données
+      set(ref(database, "users/" + user.uid), {
         email: email,
-        dob: dob,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        // Envoi d'un email de vérification
-        return user.sendEmailVerification();
-      }).then(() => {
-        alert("Inscription réussie ! Un e-mail de vérification vous a été envoyé.");
-        window.location.href = "login.html"; // Redirection après inscription
+        prenom: prenom,
+        naissance: naissance,
+        createdAt: new Date().toISOString()
       });
+
+      alert("Inscription réussie !");
+      window.location.href = "login.html";
     })
     .catch((error) => {
-      console.error(error);
       alert("Erreur : " + error.message);
     });
 });
