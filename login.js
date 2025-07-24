@@ -1,6 +1,6 @@
-// signup.js
+// login.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
@@ -15,21 +15,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-document.getElementById("signup-form").addEventListener("submit", function (e) {
+document.getElementById("login-form").addEventListener("submit", function (e) {
   e.preventDefault();
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  createUserWithEmailAndPassword(auth, email, password)
+  signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // Inscription réussie
-      alert("Inscription réussie !");
-      // Redirige vers mur.html
+      // Connexion réussie
+      alert("Bienvenue sur Planète Cœurs 💖");
+      // Rediriger vers le mur
       window.location.href = "mur.html";
     })
     .catch((error) => {
-      const errorCode = error.code;
       const errorMessage = error.message;
       alert("Erreur : " + errorMessage);
     });
