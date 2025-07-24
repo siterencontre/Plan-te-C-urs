@@ -1,114 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Mur - Planète Cœurs</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #fff0f5;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 26px;
-      color: #e91e63;
-      font-weight: bold;
-    }
-    #publications {
-      max-width: 700px;
-      margin: 20px auto;
-      padding: 10px;
-      font-size: 18px;
-    }
-    .publication {
-      background: white;
-      margin-bottom: 15px;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-    .auteur {
-      font-weight: bold;
-      color: #c2185b;
-      margin-bottom: 5px;
-    }
-    .date {
-      font-size: 14px;
-      color: gray;
-      margin-bottom: 10px;
-    }
-    .contenu {
-      font-size: 18px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mur | Planète Cœurs 💖</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header>
+    <img src="logo.png" alt="Logo Planète Cœurs" style="width: 120px;" />
+    <h1>Planète Cœurs 💖</h1>
+  </header>
 
-<header>Planète Cœurs 💖</header>
-<div id="publications"><em>Chargement des publications…</em></div>
+  <main>
+    <h2 id="welcomeMessage"></h2>
+    <button onclick="logout()">Se déconnecter</button>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  query,
-  orderBy,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    <section id="mur">
+      <p>Ici s'affichera le contenu du mur (publications, messages, etc.)</p>
+    </section>
+  </main>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
-  authDomain: "planetes-coeurs-site.firebaseapp.com",
-  projectId: "planetes-coeurs-site",
-  storageBucket: "planetes-coeurs-site.appspot.com",
-  messagingSenderId: "433372689765",
-  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
-  measurementId: "G-SMZTEG955E"
-};
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+    const firebaseConfig = {
+      apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+      authDomain: "planetes-coeurs-site.firebaseapp.com",
+      projectId: "planetes-coeurs-site",
+      storageBucket: "planetes-coeurs-site.appspot.com",
+      messagingSenderId: "433372689765",
+      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+      measurementId: "G-SMZTEG955E"
+    };
 
-const publicationsDiv = document.getElementById("publications");
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-const q = query(
-  collection(db, "publications"),
-  orderBy("timestamp", "desc")
-);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // ✅ Utilisateur connecté
+        document.getElementById("welcomeMessage").textContent =
+          "Bienvenue sur Planète Cœurs 💖, " + (user.email || "utilisateur") + " !";
+      } else {
+        // ❌ Non connecté → redirection
+        window.location.href = "login.html";
+      }
+    });
 
-onSnapshot(q, (querySnapshot) => {
-  publicationsDiv.innerHTML = ""; // vider le contenu
-
-  if (querySnapshot.empty) {
-    publicationsDiv.innerHTML = "<p>Aucune publication pour l'instant 💭</p>";
-    return;
-  }
-
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-
-    const pub = document.createElement("div");
-    pub.className = "publication";
-
-    const dateTexte = data.timestamp && data.timestamp.toDate
-      ? data.timestamp.toDate().toLocaleString()
-      : "Date inconnue";
-
-    pub.innerHTML = `
-      <div class="auteur">${data.auteur || "Anonyme"}</div>
-      <div class="date">${dateTexte}</div>
-      <div class="contenu">${data.contenu || "(vide)"}</div>
-    `;
-
-    publicationsDiv.appendChild(pub);
-  });
-});
-</script>
-
+    // 🔓 Déconnexion
+    window.logout = function () {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    };
+  </script>
 </body>
 </html>
