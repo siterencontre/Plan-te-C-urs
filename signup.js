@@ -1,58 +1,53 @@
-// Import Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+// Initialisation Firebase (à adapter selon ton projet)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-// Configuration Firebase (corrigée)
 const firebaseConfig = {
-  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
-  authDomain: "planetes-coeurs-site.firebaseapp.com",
-  projectId: "planetes-coeurs-site",
+  apiKey: "TON_API_KEY",
+  authDomain: "TON_PROJET.firebaseapp.com",
+  projectId: "TON_PROJET",
   storageBucket: "planetes-coeurs-site.appspot.com",
-  messagingSenderId: "433372689765",
-  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
-  measurementId: "G-SMZTEG955E"
+  messagingSenderId: "TON_ID",
+  appId: "TON_APP_ID"
 };
 
-// Initialisation Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Fonction d'inscription
-async function signup() {
-  const nom = document.getElementById("nom").value.trim();
-  const prenom = document.getElementById("prenom").value.trim();
-  const dateNaissance = document.getElementById("dateNaissance").value;
+// Cible le formulaire
+document.getElementById("signup-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  // Récupère les données du formulaire
+  const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-  const message = document.getElementById("message");
-
-  if (password !== confirmPassword) {
-    message.textContent = "Les mots de passe ne correspondent pas.";
-    return;
-  }
 
   try {
+    // Crée le compte utilisateur
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Enregistrer les infos dans Firestore
+    // Enregistre les infos dans Firestore
     await setDoc(doc(db, "utilisateurs", user.uid), {
-      nom,
-      prenom,
-      dateNaissance,
-      email
+      uid: user.uid,
+      nom: name,
+      email: email,
+      dateInscription: new Date()
     });
 
-    message.style.color = "green";
-    message.textContent = "Compte créé avec succès !";
-
-    // Redirection (facultatif)
-    // window.location.href = "login.html";
-
+    alert("Compte créé avec succès !");
+    window.location.href = "login.html"; // Redirige vers la page de connexion
   } catch (error) {
-    message.textContent = "Erreur : " + error.message;
+    alert("Erreur : " + error.message);
   }
-}
+});
