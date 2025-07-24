@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="fr">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -16,70 +17,85 @@
       height: 100vh;
       color: white;
       text-align: center;
-    }img {
-  width: 180px;
-  height: auto;
-  margin-bottom: 20px;
-}
+    }
 
-h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
+    img {
+      width: 180px;
+      height: auto;
+      margin-bottom: 20px;
+    }
 
-.btn-container {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-}
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
 
-.btn {
-  background-color: white;
-  color: #ff4e74;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 30px;
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  transition: 0.3s;
-}
+    .btn-container {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
 
-.btn:hover {
-  background-color: #ffe3eb;
-}
+    .btn {
+      background-color: white;
+      color: #ff4e74;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.3s;
+    }
 
-footer {
-  position: absolute;
-  bottom: 15px;
-  font-size: 0.8rem;
-}
+    .btn:hover {
+      background-color: #ffe3eb;
+    }
 
+    footer {
+      position: absolute;
+      bottom: 15px;
+      font-size: 0.8rem;
+    }
   </style>
-  <!-- Firebase App (core) -->
+
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <!-- Firebase Auth -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <!-- Firebase Firestore -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-  <!-- Firebase Storage -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+
+  <!-- Configuration Firebase (clé corrigée) -->
   <script>
     const firebaseConfig = {
-      apiKey: "VOTRE_API_KEY",
+      apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
       authDomain: "planetes-coeurs-site.firebaseapp.com",
       projectId: "planetes-coeurs-site",
       storageBucket: "planetes-coeurs-site.appspot.com",
-      messagingSenderId: "VOTRE_MESSAGING_SENDER_ID",
-      appId: "VOTRE_APP_ID"
+      messagingSenderId: "433372689765",
+      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+      measurementId: "G-SMZTEG955E"
     };
     firebase.initializeApp(firebaseConfig);
   </script>
 </head>
-<body>  <!-- Logo -->  <img src="logo.png" alt="Logo Planète Cœurs" />  <!-- Slogan ou titre -->  <h1>Bienvenue sur Planète Cœurs</h1>
-  <p>Rejoignez le réseau où les cœurs se connectent 💖</p>  <!-- Boutons -->  <div class="btn-container">
+
+<body>
+  <!-- Logo -->
+  <img src="logo.png" alt="Logo Planète Cœurs" />
+
+  <!-- Titre -->
+  <h1>Bienvenue sur Planète Cœurs</h1>
+  <p>Rejoignez le réseau où les cœurs se connectent 💖</p>
+
+  <!-- Boutons -->
+  <div class="btn-container">
     <a href="login.html" class="btn">Connexion</a>
-  </div>  <!-- Footer -->  <footer>
+  </div>
+
+  <!-- Footer -->
+  <footer>
     &copy; 2025 Planète Cœurs. Tous droits réservés.
-  </footer></body>
+  </footer>
+</body>
 </html>
