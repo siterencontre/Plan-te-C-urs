@@ -3,61 +3,104 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inscription - Planète Cœurs</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Planète Cœurs – Inscription</title>
+  <link rel="stylesheet" href="signup.css" />
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
-<body class="signup-body">
-
+<body>
   <div class="container">
-    <div class="left-panel">
-      <img src="logo.png" alt="Logo Planète Cœurs" class="logo"/>
-      <h2>Bienvenue sur <span>Planète Cœurs</span></h2>
-      <p>Trouvez l’amour… un cœur à la fois 💖</p>
-    </div>
+    <h1>❤️ Planète Cœurs</h1>
+    <p>Trouvez l’amour… un cœur à la fois 💖</p>
+    <form id="multiStepForm">
+      <div class="step active">
+        <label for="nom">Quel est ton nom ?</label>
+        <input type="text" id="nom" required />
+        <button type="button" onclick="nextStep()">Suivant</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
 
-    <div class="right-panel">
-      <form id="signup-form">
-        <div class="step active" id="step1">
-          <h3>Étape 1/3 : Infos de base</h3>
-          <input type="text" id="prenom" placeholder="Prénom" required />
-          <input type="text" id="nom" placeholder="Nom" required />
-          <select id="sexe" required>
-            <option value="">Sexe</option>
-            <option value="Homme">Homme</option>
-            <option value="Femme">Femme</option>
-            <option value="Autre">Autre</option>
-          </select>
-          <input type="number" id="age" placeholder="Âge" required />
-          <button type="button" onclick="nextStep()">Suivant</button>
-        </div>
+      <div class="step">
+        <label for="prenom">Ton prénom ?</label>
+        <input type="text" id="prenom" required />
+        <button type="button" onclick="nextStep()">Suivant</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
 
-        <div class="step" id="step2">
-          <h3>Étape 2/3 : Détails personnels</h3>
-          <select id="situation" required>
-            <option value="">Situation amoureuse</option>
-            <option value="Célibataire">Célibataire</option>
-            <option value="Divorcé(e)">Divorcé(e)</option>
-            <option value="Marié(e)">Marié(e)</option>
-          </select>
-          <input type="text" id="ville" placeholder="Ville" required />
-          <input type="text" id="pays" placeholder="Pays" required />
-          <input type="text" id="adresse" placeholder="Adresse" required />
-          <textarea id="bio" placeholder="Petite biographie..."></textarea>
-          <button type="button" onclick="prevStep()">Retour</button>
-          <button type="button" onclick="nextStep()">Suivant</button>
-        </div>
+      <div class="step">
+        <label for="sexe">Tu es :</label>
+        <select id="sexe" required>
+          <option value="">Choisis...</option>
+          <option value="Homme">Homme</option>
+          <option value="Femme">Femme</option>
+          <option value="Autre">Autre</option>
+        </select>
+        <button type="button" onclick="nextStep()">Suivant</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
 
-        <div class="step" id="step3">
-          <h3>Étape 3/3 : Compte</h3>
-          <input type="email" id="email" placeholder="Email" required />
-          <input type="password" id="password" placeholder="Mot de passe" required />
-          <button type="button" onclick="prevStep()">Retour</button>
-          <button type="submit">Créer mon compte</button>
-          <p class="or">— ou —</p>
-          <div id="google-signin-btn" class="google-button">Continuer avec Google</div>
-        </div>
-      </form>
-    </div>
+      <div class="step">
+        <label for="age">Quel âge as-tu ?</label>
+        <input type="number" id="age" required />
+        <button type="button" onclick="nextStep()">Suivant</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
+
+      <div class="step">
+        <label for="situation">Situation amoureuse ?</label>
+        <select id="situation">
+          <option value="">Choisis...</option>
+          <option value="Célibataire">Célibataire</option>
+          <option value="Divorcé(e)">Divorcé(e)</option>
+          <option value="Marié(e)">Marié(e)</option>
+        </select>
+        <button type="button" onclick="nextStep()">Suivant</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
+
+      <div class="step">
+        <label for="ville">Ville</label>
+        <input type="text" id="ville" required />
+        <button type="button" onclick="nextStep()">Suivant</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
+
+      <div class="step">
+        <label for="pays">Pays</label>
+        <input type="text" id="pays" required />
+        <button type="button" onclick="nextStep()">Suivant</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
+
+      <div class="step">
+        <label for="adresse">Adresse</label>
+        <input type="text" id="adresse" required />
+        <button type="button" onclick="nextStep()">Suivant</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
+
+      <div class="step">
+        <label for="bio">Une petite biographie...</label>
+        <textarea id="bio" required></textarea>
+        <button type="button" onclick="nextStep()">Suivant</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
+
+      <div class="step">
+        <label for="email">Ton e-mail</label>
+        <input type="email" id="email" required />
+        <button type="button" onclick="nextStep()">Suivant</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
+
+      <div class="step">
+        <label for="password">Choisis un mot de passe</label>
+        <input type="password" id="password" required />
+        <button type="submit">Créer mon compte</button>
+        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
+      </div>
+    </form>
   </div>
 
   <script src="signup.js"></script>
