@@ -2,63 +2,98 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mur | Planète Cœurs 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mur - Planète Cœurs</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #ffe6f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #ff66a3;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .container {
+      padding: 2rem;
+    }
+
+    .post-box {
+      background: white;
+      border-radius: 15px;
+      padding: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+    }
+
+    .post-box textarea {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 1rem;
+      resize: none;
+      font-size: 1rem;
+      background: #fff0f5;
+    }
+
+    .post-box button {
+      margin-top: 1rem;
+      background-color: #ff66a3;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .publication {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-top: 1rem;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Logo Planète Cœurs" style="width: 120px;" />
-    <h1>Planète Cœurs 💖</h1>
+    💖 Planète Cœurs - Mur d'Amour 💖
   </header>
 
-  <main>
-    <h2 id="welcomeMessage"></h2>
-    <button onclick="logout()">Se déconnecter</button>
+  <div class="container">
+    <div class="post-box">
+      <textarea id="postText" rows="4" placeholder="Exprime ton cœur..."></textarea>
+      <button onclick="publier()">Publier</button>
+    </div>
 
-    <section id="mur">
-      <p>Ici s'affichera le contenu du mur (publications, messages, etc.)</p>
-    </section>
-  </main>
+    <div id="publications">
+      <!-- Les publications vont apparaître ici -->
+    </div>
+  </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
-      authDomain: "planetes-coeurs-site.firebaseapp.com",
-      projectId: "planetes-coeurs-site",
-      storageBucket: "planetes-coeurs-site.appspot.com",
-      messagingSenderId: "433372689765",
-      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
-      measurementId: "G-SMZTEG955E"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // ✅ Utilisateur connecté
-        document.getElementById("welcomeMessage").textContent =
-          "Bienvenue sur Planète Cœurs 💖, " + (user.email || "utilisateur") + " !";
-      } else {
-        // ❌ Non connecté → redirection
-        window.location.href = "login.html";
+  <script>
+    function publier() {
+      const texte = document.getElementById("postText").value;
+      if (!texte.trim()) {
+        alert("Écris quelque chose d'abord !");
+        return;
       }
-    });
 
-    // 🔓 Déconnexion
-    window.logout = function () {
-      signOut(auth).then(() => {
-        window.location.href = "login.html";
-      });
-    };
+      const div = document.createElement("div");
+      div.className = "publication";
+      div.innerText = texte;
+
+      document.getElementById("publications").prepend(div);
+      document.getElementById("postText").value = "";
+    }
   </script>
 </body>
 </html>
