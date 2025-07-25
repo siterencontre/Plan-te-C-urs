@@ -1,108 +1,163 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Planète Cœurs – Inscription</title>
-  <link rel="stylesheet" href="signup.css" />
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-</head>
-<body>
-  <div class="container">
-    <h1>❤️ Planète Cœurs</h1>
-    <p>Trouvez l’amour… un cœur à la fois 💖</p>
-    <form id="multiStepForm">
-      <div class="step active">
-        <label for="nom">Quel est ton nom ?</label>
-        <input type="text" id="nom" required />
-        <button type="button" onclick="nextStep()">Suivant</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-
-      <div class="step">
-        <label for="prenom">Ton prénom ?</label>
-        <input type="text" id="prenom" required />
-        <button type="button" onclick="nextStep()">Suivant</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-
-      <div class="step">
-        <label for="sexe">Tu es :</label>
-        <select id="sexe" required>
-          <option value="">Choisis...</option>
-          <option value="Homme">Homme</option>
-          <option value="Femme">Femme</option>
-          <option value="Autre">Autre</option>
-        </select>
-        <button type="button" onclick="nextStep()">Suivant</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-
-      <div class="step">
-        <label for="age">Quel âge as-tu ?</label>
-        <input type="number" id="age" required />
-        <button type="button" onclick="nextStep()">Suivant</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-
-      <div class="step">
-        <label for="situation">Situation amoureuse ?</label>
-        <select id="situation">
-          <option value="">Choisis...</option>
-          <option value="Célibataire">Célibataire</option>
-          <option value="Divorcé(e)">Divorcé(e)</option>
-          <option value="Marié(e)">Marié(e)</option>
-        </select>
-        <button type="button" onclick="nextStep()">Suivant</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-
-      <div class="step">
-        <label for="ville">Ville</label>
-        <input type="text" id="ville" required />
-        <button type="button" onclick="nextStep()">Suivant</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-
-      <div class="step">
-        <label for="pays">Pays</label>
-        <input type="text" id="pays" required />
-        <button type="button" onclick="nextStep()">Suivant</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-
-      <div class="step">
-        <label for="adresse">Adresse</label>
-        <input type="text" id="adresse" required />
-        <button type="button" onclick="nextStep()">Suivant</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-
-      <div class="step">
-        <label for="bio">Une petite biographie...</label>
-        <textarea id="bio" required></textarea>
-        <button type="button" onclick="nextStep()">Suivant</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-
-      <div class="step">
-        <label for="email">Ton e-mail</label>
-        <input type="email" id="email" required />
-        <button type="button" onclick="nextStep()">Suivant</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-
-      <div class="step">
-        <label for="password">Choisis un mot de passe</label>
-        <input type="password" id="password" required />
-        <button type="submit">Créer mon compte</button>
-        <button type="button" onclick="signInWithGoogle()">Continuer avec Google</button>
-      </div>
-    </form>
-  </div>
-
-  <script src="signup.js"></script>
-</body>
-</html>
+<!DOCTYPE html>  <html lang="fr">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+  <title>Inscription - Planète Cœurs</title>  
+  <style>  
+    body {  
+      margin: 0;  
+      font-family: 'Segoe UI', sans-serif;  
+      background: url('https://www.transparenttextures.com/patterns/hearts.png'), #ffc0cb;  
+      background-size: cover;  
+      display: flex;  
+      justify-content: center;  
+      align-items: center;  
+      min-height: 100vh;  
+    }  
+    .container {  
+      background: white;  
+      padding: 30px;  
+      border-radius: 20px;  
+      width: 90%;  
+      max-width: 400px;  
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);  
+      text-align: center;  
+    }  
+    .container img {  
+      width: 100px;  
+      margin-bottom: 10px;  
+    }  
+    h2 {  
+      color: #e91e63;  
+      margin-bottom: 20px;  
+    }  
+    .form-step {  
+      display: none;  
+    }  
+    .form-step.active {  
+      display: block;  
+    }  
+    input, select, button {  
+      width: 100%;  
+      padding: 12px;  
+      margin: 10px 0;  
+      border: 1px solid #ddd;  
+      border-radius: 10px;  
+    }  
+    button {  
+      background: #e91e63;  
+      color: white;  
+      font-weight: bold;  
+      border: none;  
+      cursor: pointer;  
+    }  
+    .google-btn {  
+      background: white;  
+      color: #444;  
+      border: 1px solid #ccc;  
+      display: flex;  
+      align-items: center;  
+      justify-content: center;  
+      gap: 10px;  
+    }  
+    .google-btn img {  
+      width: 20px;  
+    }  
+  </style>  
+</head>  
+<body>  
+  <div class="container">  
+    <img src="logo.png" alt="Logo Planète Cœurs" />  
+    <h2>Créer un compte</h2>  
+    <form id="signupForm">  
+      <div class="form-step active">  
+        <input type="text" placeholder="Nom et prénom" id="name" required />  
+        <button type="button" onclick="nextStep()">Suivant</button>  
+      </div>  
+      <div class="form-step">  
+        <input type="date" id="birth" required />  
+        <button type="button" onclick="nextStep()">Suivant</button>  
+      </div>  
+      <div class="form-step">  
+        <label><input type="radio" name="gender" value="Homme" required /> Homme</label><br />  
+        <label><input type="radio" name="gender" value="Femme" required /> Femme</label><br />  
+        <button type="button" onclick="nextStep()">Suivant</button>  
+      </div>  
+      <div class="form-step">  
+        <input type="text" id="country" placeholder="Pays d’origine" required />  
+        <button type="button" onclick="nextStep()">Suivant</button>  
+      </div>  
+      <div class="form-step">  
+        <input type="text" id="city" placeholder="Ville / Adresse" required />  
+        <button type="button" onclick="nextStep()">Suivant</button>  
+      </div>  
+      <div class="form-step">  
+        <select id="status" required>  
+          <option value="">Situation matrimoniale</option>  
+          <option value="Célibataire">Célibataire</option>  
+          <option value="En couple">En couple</option>  
+          <option value="Marié(e)">Marié(e)</option>  
+          <option value="Divorcé(e)">Divorcé(e)</option>  
+        </select>  
+        <button type="button" onclick="nextStep()">Suivant</button>  
+      </div>  
+      <div class="form-step">  
+        <input type="email" id="email" placeholder="Adresse e-mail" required />  
+        <input type="password" id="password" placeholder="Mot de passe" required />  
+        <input type="password" id="confirmPassword" placeholder="Confirmer le mot de passe" required />  
+        <button type="submit">S'inscrire</button>  
+      </div>  
+    </form>  
+    <p>— ou —</p>  
+    <button class="google-btn">  
+      <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google logo" />  
+      Continuer avec Google  
+    </button>  
+  </div>    <script>  
+    const steps = document.querySelectorAll('.form-step');  
+    let currentStep = 0;  
+  
+    function nextStep() {  
+      const current = steps[currentStep];  
+      const inputs = current.querySelectorAll('input, select');  
+      for (let input of inputs) {  
+        if (!input.checkValidity()) {  
+          input.reportValidity();  
+          return;  
+        }  
+      }  
+      steps[currentStep].classList.remove('active');  
+      currentStep++;  
+      steps[currentStep].classList.add('active');  
+    }  
+  
+    document.getElementById('signupForm').addEventListener('submit', function (e) {  
+      e.preventDefault();  
+      const password = document.getElementById("password").value;  
+      const confirm = document.getElementById("confirmPassword").value;  
+      if (password !== confirm) {  
+        alert("Les mots de passe ne correspondent pas.");  
+        return;  
+      }  
+  
+      const data = {  
+        name: document.getElementById("name").value,  
+        birth: document.getElementById("birth").value,  
+        gender: document.querySelector('input[name="gender"]:checked').value,  
+        country: document.getElementById("country").value,  
+        city: document.getElementById("city").value,  
+        status: document.getElementById("status").value,  
+        email: document.getElementById("email").value,  
+        password: password,  
+      };  
+  
+      console.log("Utilisateur inscrit :", data);  
+      localStorage.setItem("signupData", JSON.stringify(data));  
+      alert("Compte créé avec succès !");  
+      // Rediriger ou réinitialiser ici  
+    });  
+  
+    // Remplir automatiquement le pays avec API ou par IP plus tard  
+    document.getElementById("country").value = Intl.DisplayNames ? new Intl.DisplayNames(['fr'], { type: 'region' }).of((Intl.DateTimeFormat().resolvedOptions().locale || "FR").slice(-2)) : "Cameroun";  
+  </script>  </body>  
+</html>  
