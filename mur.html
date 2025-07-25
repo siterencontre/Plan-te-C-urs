@@ -1,11 +1,49 @@
-<!-- mur.html -->
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Mur Planète Cœurs</title>
+  <title>Mur - Planète Cœurs</title>
 </head>
 <body>
-  <h1>Bienvenue sur le mur 💖</h1>
+  <h1>Bienvenue sur le mur !</h1>
+  <p id="user-info"></p>
+  <button id="logout">Déconnexion</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+      authDomain: "planetes-coeurs-site.firebaseapp.com",
+      projectId: "planetes-coeurs-site",
+      storageBucket: "planetes-coeurs-site.appspot.com",
+      messagingSenderId: "433372689765",
+      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+      measurementId: "G-SMZTEG955E"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("user-info").textContent =
+          "Connecté en tant que " + user.displayName;
+      } else {
+        window.location.href = "signup.html"; // ou index.html
+      }
+    });
+
+    document.getElementById("logout").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        window.location.href = "signup.html"; // ou index.html
+      });
+    });
+  </script>
 </body>
 </html>
