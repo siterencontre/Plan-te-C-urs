@@ -1,3 +1,4 @@
+<!-- signup.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,74 +9,14 @@
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="Logo" class="logo" />
-    <h2>Inscription</h2>
+    <img src="logo.png" alt="Logo Planète Cœurs" class="logo" />
+    <h2>Bienvenue sur Planète Cœurs 💕</h2>
 
-    <form id="signupForm">
-      <input type="text" id="fullname" placeholder="Nom complet" required />
-      <input type="email" id="email" placeholder="Adresse e-mail" required />
-      <input type="password" id="password" placeholder="Mot de passe" required />
-      <button type="submit">Créer un compte</button>
-    </form>
-
-    <div class="divider">ou</div>
-
-    <button id="googleSignup">
-      <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google" />
-      Continuer avec Google
-    </button>
-
-    <p>Vous avez déjà un compte ? <a href="login.html">Connexion</a></p>
+    <!-- Bouton Google -->
+    <button id="googleSignInBtn">Continuer avec Google</button>
   </div>
 
-  <!-- Firebase App -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-
-  <!-- Config Firebase -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
-      authDomain: "planetes-coeurs-site.firebaseapp.com",
-      projectId: "planetes-coeurs-site",
-      storageBucket: "planetes-coeurs-site.appspot.com",
-      messagingSenderId: "433372689765",
-      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
-      measurementId: "G-SMZTEG955E"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
-
-  <!-- Script d'inscription -->
-  <script>
-    const auth = firebase.auth();
-
-    document.getElementById("signupForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Rediriger vers le mur après inscription réussie
-          window.location.href = "mur.html";
-        })
-        .catch((error) => {
-          alert("Erreur : " + error.message);
-        });
-    });
-
-    // Google Auth
-    document.getElementById("googleSignup").addEventListener("click", () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then((result) => {
-          window.location.href = "mur.html"; // Redirection après succès
-        })
-        .catch((error) => {
-          alert("Erreur Google : " + error.message);
-        });
-    });
-  </script>
+  <!-- Firebase & JS -->
+  <script type="module" src="signup.js"></script>
 </body>
 </html>
