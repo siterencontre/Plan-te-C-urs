@@ -3,40 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inscription - Planète Cœurs</title>
+  <title>Inscription – Planète Cœurs</title>
   <link rel="stylesheet" href="style.css" />
+  <script type="module">
+    // Configuration Firebase (ton vrai projet)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+      authDomain: "planetes-coeurs-site.firebaseapp.com",
+      projectId: "planetes-coeurs-site",
+      storageBucket: "planetes-coeurs-site.firebasestorage.app",
+      messagingSenderId: "433372689765",
+      appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+      measurementId: "G-SMZTEG955E"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Traitement du formulaire
+    window.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("signup-form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = form.email.value;
+        const password = form.password.value;
+
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          alert("Bienvenue dans l’univers romantique de Planète Cœurs !");
+          window.location.href = "profil.html";
+        } catch (error) {
+          alert("Erreur : " + error.message);
+        }
+      });
+    });
+  </script>
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="Logo" class="logo"/>
-    <h1>Inscription Romantique</h1>
-    <form id="signupForm">
-      <div class="step step-1 active">
-        <input type="text" id="nom" placeholder="Ton prénom romantique" required />
-        <input type="text" id="ville" placeholder="Ta ville préférée" required />
-        <button type="button" onclick="nextStep(1)">Suivant</button>
-      </div>
+    <img src="logo.png" alt="Logo Planète Cœurs" class="logo" />
+    <h1>Créer un compte romantique</h1>
 
-      <div class="step step-2">
-        <input type="email" id="email" placeholder="Ton email amoureux" required />
-        <input type="text" id="pays" placeholder="Ton pays de rêve" required />
-        <button type="button" onclick="nextStep(2)">Suivant</button>
-      </div>
-
-      <div class="step step-3">
-        <input type="password" id="password" placeholder="Mot de passe secret" required />
-        <input type="password" id="confirmPassword" placeholder="Confirme le mot de passe" required />
-        <button type="submit">S’inscrire</button>
-      </div>
+    <form id="signup-form">
+      <input type="email" name="email" placeholder="Adresse e-mail romantique" required />
+      <input type="password" name="password" placeholder="Mot de passe secret d’amour" required />
+      <button type="submit">Rejoindre Planète Cœurs</button>
     </form>
 
-    <div class="google-signin">
-      <p>Ou</p>
-      <button onclick="signInWithGoogle()">Continuer avec Google</button>
-    </div>
+    <p>Déjà membre ? <a href="login.html">Connexion</a></p>
   </div>
-
-  <!-- Firebase SDKs -->
-  <script type="module" src="signup.js"></script>
 </body>
 </html>
