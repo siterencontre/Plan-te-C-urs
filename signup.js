@@ -1,10 +1,9 @@
-// ✅ Initialisation Firebase
+// google.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
-  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
@@ -21,24 +20,15 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// ✅ Google sign-in
-document.getElementById('googleSignup').addEventListener('click', () => {
+document.getElementById("googleSignup").addEventListener("click", () => {
   signInWithPopup(auth, provider)
     .then((result) => {
       const user = result.user;
-      console.log("Connecté avec Google :", user.displayName);
+      alert("Bienvenue " + user.displayName);
       window.location.href = "mur.html";
     })
     .catch((error) => {
-      console.error("Erreur Google Sign-In :", error.code, error.message);
-      alert("Erreur lors de la connexion Google : " + error.message);
+      console.error("Erreur Google :", error);
+      alert("Erreur lors de la connexion avec Google");
     });
-});
-
-// ✅ Redirection si déjà connecté
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("Utilisateur déjà connecté :", user.displayName);
-    window.location.href = "mur.html";
-  }
 });
