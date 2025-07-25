@@ -1,17 +1,31 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+// signup.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const auth = getAuth();
+// Configuration Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+  authDomain: "planetes-coeurs-site.firebaseapp.com",
+  projectId: "planetes-coeurs-site",
+  storageBucket: "planetes-coeurs-site.appspot.com",
+  messagingSenderId: "433372689765",
+  appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+  measurementId: "G-SMZTEG955E"
+};
+
+// Initialiser Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-document.getElementById('google-signup').addEventListener('click', () => {
+// Bouton Google
+document.getElementById("googleSignInBtn").addEventListener("click", () => {
   signInWithPopup(auth, provider)
     .then((result) => {
-      const user = result.user;
-      // Redirige vers la page mur.html
+      // Connexion réussie
       window.location.href = "mur.html";
     })
     .catch((error) => {
-      console.error("Erreur lors de la connexion Google :", error.message);
-      alert("Erreur Google : " + error.message);
+      alert("Erreur de connexion : " + error.message);
     });
 });
