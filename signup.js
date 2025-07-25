@@ -1,4 +1,13 @@
-// Initialisation Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+
+// ✅ Configuration Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
   authDomain: "planetes-coeurs-site.firebaseapp.com",
@@ -9,34 +18,41 @@ const firebaseConfig = {
   measurementId: "G-SMZTEG955E"
 };
 
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-// Authentification Email/Mot de passe
-document.getElementById("signupForm").addEventListener("submit", function (e) {
+// ✅ Création de compte avec e-mail/mot de passe
+document.getElementById("signupForm")?.addEventListener("submit", function (e) {
   e.preventDefault();
+  const email = document.getElementById("email")?.value;
+  const password = document.getElementById("password")?.value;
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  firebase.auth().createUserWithEmailAndPassword(email, password)
+  createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       alert("Compte créé avec succès !");
-      window.location.href = "mur.html";
+      window.location.href = "mur.html"; // Redirection vers le mur
     })
     .catch((error) => {
       alert("Erreur : " + error.message);
     });
 });
 
-// Connexion avec Google
-document.getElementById("googleSignup").addEventListener("click", function () {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider)
+// ✅ Connexion avec Google
+document.getElementById("googleSignup")?.addEventListener("click", function () {
+  signInWithPopup(auth, provider)
     .then((result) => {
-      alert("Connexion Google réussie !");
-      window.location.href = "mur.html";
+      alert("Connecté avec Google !");
+      window.location.href = "mur.html"; // Redirection vers le mur
     })
     .catch((error) => {
       alert("Erreur Google : " + error.message);
     });
+});
+
+// ✅ Surveille la connexion
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Connecté :", user.email);
+  }
 });
