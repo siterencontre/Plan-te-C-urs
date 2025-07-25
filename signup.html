@@ -3,155 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inscription - Planète Cœurs</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background-color: #ffe6f0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    .signup-container {
-      max-width: 500px;
-      margin: 40px auto;
-      background-color: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .logo {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .logo img {
-      width: 120px;
-    }
-
-    h2 {
-      color: #d63384;
-      text-align: center;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      color: #333;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #d63384;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      margin-top: 20px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background-color: #c2185b;
-    }
-
-    .google-btn {
-      background-color: #ffffff;
-      color: #444;
-      border: 1px solid #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .google-btn img {
-      height: 20px;
-    }
-
-    .step {
-      display: none;
-    }
-
-    .step.active {
-      display: block;
-    }
-  </style>
+  <title>Inscription | Planète Cœurs</title>
+  <link rel="stylesheet" href="signup.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 </head>
 <body>
-  <div class="signup-container">
-    <div class="logo">
-      <img src="logo.png" alt="Planète Cœurs" />
-    </div>
-    <h2>Inscription à Planète Cœurs</h2>
-
+  <div class="container">
+    <img src="logo.png" class="logo" alt="Logo Planète Cœurs" />
+    <h1>Inscris-toi à Planète Cœurs</h1>
     <form id="signupForm">
-      <!-- Étape 1 -->
-      <div class="step active" id="step1">
-        <label for="email">Adresse e-mail</label>
-        <input type="email" id="email" required />
-
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" required />
-
-        <button type="button" onclick="nextStep()">Suivant</button>
-      </div>
-
-      <!-- Étape 2 -->
-      <div class="step" id="step2">
-        <label for="name">Nom complet</label>
-        <input type="text" id="name" required />
-
-        <label for="age">Âge</label>
-        <input type="number" id="age" required />
-
-        <label for="gender">Genre</label>
-        <select id="gender" required>
-          <option value="Femme">Femme</option>
-          <option value="Homme">Homme</option>
-        </select>
-
-        <button type="button" onclick="prevStep()">Retour</button>
-        <button type="submit">S'inscrire</button>
-      </div>
+      <input type="email" id="email" placeholder="Adresse e-mail" required />
+      <input type="password" id="password" placeholder="Mot de passe" required />
+      <button type="submit">Créer un compte</button>
     </form>
 
-    <p style="text-align: center; margin-top: 15px;">ou</p>
-    
     <button id="googleSignup" class="google-btn">
-      <img src="https://img.icons8.com/color/16/000000/google-logo.png" />
+      <img src="https://img.icons8.com/color/24/000000/google-logo.png"/>
       Continuer avec Google
     </button>
+
+    <p>Tu as déjà un compte ? <a href="login.html">Connecte-toi ici</a></p>
   </div>
 
-  <script>
-    let currentStep = 1;
-
-    function nextStep() {
-      document.getElementById("step" + currentStep).classList.remove("active");
-      currentStep++;
-      document.getElementById("step" + currentStep).classList.add("active");
-    }
-
-    function prevStep() {
-      document.getElementById("step" + currentStep).classList.remove("active");
-      currentStep--;
-      document.getElementById("step" + currentStep).classList.add("active");
-    }
-  </script>
-
-  <!-- ✅ C'est ici que le fichier JS est bien chargé -->
-  <script type="module" src="signup.js"></script>
+  <script src="signup.js"></script>
 </body>
 </html>
