@@ -1,287 +1,221 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mur - Planète Cœurs</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <title>Mur – Planète Cœurs</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff0f5;
       margin: 0;
       padding: 0;
-      background-color: #ffe6f0;
     }
 
     header {
-      background-color: #ffffff;
-      color: #ff69b4;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 15px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      border-bottom: 2px solid #ff69b4;
-    }
-
-    .logo img {
-      height: 40px;
-      margin-right: 10px;
-    }
-
-    .search-bar {
-      flex-grow: 1;
-      margin: 0 15px;
-    }
-
-    .search-bar input {
-      width: 100%;
-      padding: 8px 15px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-    }
-
-    .top-icons i {
-      margin: 0 8px;
-      cursor: pointer;
-      font-size: 20px;
-      color: #ff69b4;
+      background: #ff69b4;
+      color: white;
+      padding: 1em;
+      text-align: center;
+      font-size: 1.4em;
+      font-weight: bold;
     }
 
     nav {
-      background-color: #fff;
-      padding: 10px;
-    }
-
-    .profile-section {
       display: flex;
-      align-items: center;
-      padding: 10px;
+      justify-content: center;
+      background-color: #ffe4e1;
+      padding: 0.5em;
+      gap: 2em;
     }
 
-    .profile-section img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 10px;
-    }
-
-    .profile-section a {
+    nav a {
       color: #d63384;
       font-weight: bold;
       text-decoration: none;
     }
 
-    .post-box {
-      background-color: white;
-      margin: 20px;
-      padding: 15px;
-      border-radius: 15px;
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     textarea {
       width: 100%;
-      height: 80px;
+      border-radius: 10px;
       padding: 10px;
-      border-radius: 10px;
       border: 1px solid #ccc;
-      font-size: 14px;
-      resize: none;
+      resize: vertical;
     }
 
-    .file-input {
+    input[type="file"] {
       margin-top: 10px;
     }
 
-    .photo-icon {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: #ff69b4;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      font-size: 16px;
-      transition: color 0.3s;
-    }
-
-    .photo-icon:hover {
-      color: #c2185b;
-    }
-
-    #imagePreview img {
-      margin-top: 10px;
-      max-width: 100%;
-      max-height: 200px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    }
-
-    .publish-btn {
-      margin-top: 10px;
-      background-color: #ff69b4;
-      color: white;
+    button {
+      background: #ff69b4;
       border: none;
-      border-radius: 20px;
+      color: white;
       padding: 10px 20px;
+      border-radius: 10px;
+      margin-top: 10px;
       cursor: pointer;
-    }
-
-    .menu-button {
-      font-size: 22px;
-      cursor: pointer;
-    }
-
-    .side-menu {
-      display: none;
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 250px;
-      height: 100%;
-      background-color: #ffe6f0;
-      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
-      padding: 20px;
-    }
-
-    .side-menu a {
-      display: block;
-      margin: 15px 0;
-      color: #d63384;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    /* Publications */
-    .feed {
-      margin: 20px;
     }
 
     .post {
-      background-color: white;
-      padding: 15px;
-      border-radius: 15px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      margin-bottom: 15px;
+      border-top: 1px solid #eee;
+      margin-top: 20px;
+      padding-top: 15px;
     }
 
     .post img {
       max-width: 100%;
-      margin-top: 10px;
       border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .actions {
+      margin-top: 10px;
+    }
+
+    .actions button {
+      background: none;
+      border: none;
+      color: #d63384;
+      cursor: pointer;
+      margin-right: 10px;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">
-      <img src="logo.png" alt="Logo Planète Cœurs">
-    </div>
-    <div class="search-bar">
-      <input type="text" placeholder="Rechercher...">
-    </div>
-    <div class="top-icons">
-      <i class="fas fa-user-circle"></i>
-      <i class="fas fa-envelope"></i>
-      <i class="fas fa-bell"></i>
-    </div>
-    <div class="menu-button" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </div>
-  </header>
+<header>❤️ Planète Cœurs – Mur romantique</header>
 
-  <div class="side-menu" id="sideMenu">
-    <a href="#">Paramètres</a>
-    <a href="#">Déconnexion</a>
-  </div>
+<nav>
+  <a href="index.html">Accueil</a>
+  <a href="profil.html">Profil</a>
+  <a href="parametres.html">Paramètres</a>
+  <a href="#" onclick="logout()">Déconnexion</a>
+</nav>
 
-  <nav>
-    <div class="profile-section">
-      <img src="photo-profil.jpg" alt="Profil Utilisateur">
-      <a href="#">Mon profil</a>
-    </div>
-  </nav>
+<div class="container">
+  <h3>Exprimez vos pensées romantiques...</h3>
+  <textarea id="message" rows="3" placeholder="Écrivez ici..."></textarea>
+  <input type="file" id="image">
+  <button onclick="publier()">Publier</button>
 
-  <!-- Zone de publication -->
-  <div class="post-box">
-    <textarea id="postText" placeholder="Que ressentez-vous aujourd’hui?"></textarea>
+  <div id="mur"></div>
+</div>
 
-    <div class="file-input">
-      <label for="photoUpload" class="photo-icon">
-        <i class="fas fa-image"></i> Ajouter une photo
-      </label>
-      <input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="previewImage(event)" />
-    </div>
+<script>
+  // Configuration Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
+    authDomain: "planetes-coeurs-site.firebaseapp.com",
+    projectId: "planetes-coeurs-site",
+    storageBucket: "planetes-coeurs-site.appspot.com",
+    messagingSenderId: "433372689765",
+    appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
+    measurementId: "G-SMZTEG955E"
+  };
 
-    <div id="imagePreview"></div>
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  const storage = firebase.storage();
 
-    <button class="publish-btn" onclick="publishPost()">Publier</button>
-  </div>
+  // Publier un post
+  async function publier() {
+    const user = auth.currentUser;
+    if (!user) return alert("Veuillez vous connecter");
+    const message = document.getElementById("message").value;
+    const imageFile = document.getElementById("image").files[0];
+    let imageURL = "";
 
-  <!-- Mur de publications -->
-  <div class="feed" id="feed"></div>
-
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById('sideMenu');
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    if (imageFile) {
+      const ref = storage.ref('images/' + Date.now() + '_' + imageFile.name);
+      await ref.put(imageFile);
+      imageURL = await ref.getDownloadURL();
     }
 
-    let imageDataUrl = '';
+    await db.collection("posts").add({
+      uid: user.uid,
+      message: message,
+      imageURL: imageURL,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      likes: 0,
+      commentaires: []
+    });
 
-    function previewImage(event) {
-      const preview = document.getElementById('imagePreview');
-      preview.innerHTML = '';
-      const file = event.target.files[0];
+    document.getElementById("message").value = "";
+    document.getElementById("image").value = "";
+    chargerPosts();
+  }
 
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          imageDataUrl = e.target.result;
-          const img = document.createElement('img');
-          img.src = imageDataUrl;
-          preview.appendChild(img);
-        }
-        reader.readAsDataURL(file);
-      }
+  // Charger les publications
+  function chargerPosts() {
+    db.collection("posts").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+      const mur = document.getElementById("mur");
+      mur.innerHTML = "";
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "post";
+        div.innerHTML = `
+          <p>${data.message}</p>
+          ${data.imageURL ? `<img src="${data.imageURL}">` : ""}
+          <div class="actions">
+            <button onclick="likePost('${doc.id}')">❤️ Like</button>
+            <button onclick="commenterPost('${doc.id}')">💬 Commenter</button>
+            <button onclick="partagerPost('${doc.id}')">🔄 Partager</button>
+          </div>
+        `;
+        mur.appendChild(div);
+      });
+    });
+  }
+
+  function likePost(id) {
+    const postRef = db.collection("posts").doc(id);
+    postRef.update({ likes: firebase.firestore.FieldValue.increment(1) });
+  }
+
+  function commenterPost(id) {
+    const commentaire = prompt("Votre commentaire :");
+    if (!commentaire) return;
+    const postRef = db.collection("posts").doc(id);
+    postRef.update({
+      commentaires: firebase.firestore.FieldValue.arrayUnion(commentaire)
+    });
+  }
+
+  function partagerPost(id) {
+    alert("Lien de la publication copié !");
+    // Ici, tu pourrais générer un lien réel à partager
+  }
+
+  function logout() {
+    firebase.auth().signOut().then(() => {
+      location.href = "index.html";
+    });
+  }
+
+  // Attendre que l’utilisateur soit connecté
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      chargerPosts();
+    } else {
+      location.href = "login.html";
     }
-
-    function publishPost() {
-      const text = document.getElementById('postText').value.trim();
-      if (text === '' && imageDataUrl === '') {
-        alert("Veuillez écrire un message ou ajouter une photo.");
-        return;
-      }
-
-      const postContainer = document.createElement('div');
-      postContainer.className = 'post';
-
-      if (text !== '') {
-        const p = document.createElement('p');
-        p.textContent = text;
-        postContainer.appendChild(p);
-      }
-
-      if (imageDataUrl !== '') {
-        const img = document.createElement('img');
-        img.src = imageDataUrl;
-        postContainer.appendChild(img);
-      }
-
-      document.getElementById('feed').prepend(postContainer);
-
-      // Réinitialiser
-      document.getElementById('postText').value = '';
-      document.getElementById('imagePreview').innerHTML = '';
-      document.getElementById('photoUpload').value = '';
-      imageDataUrl = '';
-    }
-  </script>
+  });
+</script>
 
 </body>
 </html>
