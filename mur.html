@@ -1,221 +1,90 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Mur – Planète Cœurs</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #fff0f5;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background: #ff69b4;
-      color: white;
-      padding: 1em;
-      text-align: center;
-      font-size: 1.4em;
-      font-weight: bold;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      background-color: #ffe4e1;
-      padding: 0.5em;
-      gap: 2em;
-    }
-
-    nav a {
-      color: #d63384;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 20px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    textarea {
-      width: 100%;
-      border-radius: 10px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      resize: vertical;
-    }
-
-    input[type="file"] {
-      margin-top: 10px;
-    }
-
-    button {
-      background: #ff69b4;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 10px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-
-    .post {
-      border-top: 1px solid #eee;
-      margin-top: 20px;
-      padding-top: 15px;
-    }
-
-    .post img {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-
-    .actions {
-      margin-top: 10px;
-    }
-
-    .actions button {
-      background: none;
-      border: none;
-      color: #d63384;
-      cursor: pointer;
-      margin-right: 10px;
-    }
-  </style>
-</head>
-<body>
-
-<header>❤️ Planète Cœurs – Mur romantique</header>
-
-<nav>
-  <a href="index.html">Accueil</a>
-  <a href="profil.html">Profil</a>
-  <a href="parametres.html">Paramètres</a>
-  <a href="#" onclick="logout()">Déconnexion</a>
-</nav>
-
-<div class="container">
-  <h3>Exprimez vos pensées romantiques...</h3>
-  <textarea id="message" rows="3" placeholder="Écrivez ici..."></textarea>
-  <input type="file" id="image">
-  <button onclick="publier()">Publier</button>
-
-  <div id="mur"></div>
-</div>
+<!-- ... Le code HTML reste inchangé jusqu'à la fin de <script> ... -->
 
 <script>
-  // Configuration Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
-    authDomain: "planetes-coeurs-site.firebaseapp.com",
-    projectId: "planetes-coeurs-site",
-    storageBucket: "planetes-coeurs-site.appspot.com",
-    messagingSenderId: "433372689765",
-    appId: "1:433372689765:web:8e1e6ae2b776875a329d8c",
-    measurementId: "G-SMZTEG955E"
-  };
+  let posts = [];
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  const storage = firebase.storage();
+  function publishPost() {
+    const text = document.getElementById('postText').value;
+    const imageInput = document.getElementById('postImage');
+    const image = imageInput.files[0];
 
-  // Publier un post
-  async function publier() {
-    const user = auth.currentUser;
-    if (!user) return alert("Veuillez vous connecter");
-    const message = document.getElementById("message").value;
-    const imageFile = document.getElementById("image").files[0];
-    let imageURL = "";
+    if (!text && !image) return alert("Écrivez un texte ou ajoutez une image.");
 
-    if (imageFile) {
-      const ref = storage.ref('images/' + Date.now() + '_' + imageFile.name);
-      await ref.put(imageFile);
-      imageURL = await ref.getDownloadURL();
-    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const newPost = {
+        author: "Vous",
+        text: text,
+        image: image ? e.target.result : null,
+        timestamp: new Date().toISOString(),
+        likes: 0,
+        comments: []
+      };
+      posts.unshift(newPost);
+      renderPosts();
+      document.getElementById('postText').value = '';
+      document.getElementById('postImage').value = '';
+    };
 
-    await db.collection("posts").add({
-      uid: user.uid,
-      message: message,
-      imageURL: imageURL,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      likes: 0,
-      commentaires: []
-    });
-
-    document.getElementById("message").value = "";
-    document.getElementById("image").value = "";
-    chargerPosts();
-  }
-
-  // Charger les publications
-  function chargerPosts() {
-    db.collection("posts").orderBy("createdAt", "desc").onSnapshot(snapshot => {
-      const mur = document.getElementById("mur");
-      mur.innerHTML = "";
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const div = document.createElement("div");
-        div.className = "post";
-        div.innerHTML = `
-          <p>${data.message}</p>
-          ${data.imageURL ? `<img src="${data.imageURL}">` : ""}
-          <div class="actions">
-            <button onclick="likePost('${doc.id}')">❤️ Like</button>
-            <button onclick="commenterPost('${doc.id}')">💬 Commenter</button>
-            <button onclick="partagerPost('${doc.id}')">🔄 Partager</button>
-          </div>
-        `;
-        mur.appendChild(div);
-      });
-    });
-  }
-
-  function likePost(id) {
-    const postRef = db.collection("posts").doc(id);
-    postRef.update({ likes: firebase.firestore.FieldValue.increment(1) });
-  }
-
-  function commenterPost(id) {
-    const commentaire = prompt("Votre commentaire :");
-    if (!commentaire) return;
-    const postRef = db.collection("posts").doc(id);
-    postRef.update({
-      commentaires: firebase.firestore.FieldValue.arrayUnion(commentaire)
-    });
-  }
-
-  function partagerPost(id) {
-    alert("Lien de la publication copié !");
-    // Ici, tu pourrais générer un lien réel à partager
-  }
-
-  function logout() {
-    firebase.auth().signOut().then(() => {
-      location.href = "index.html";
-    });
-  }
-
-  // Attendre que l’utilisateur soit connecté
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      chargerPosts();
+    if (image) {
+      reader.readAsDataURL(image);
     } else {
-      location.href = "login.html";
+      const newPost = {
+        author: "Vous",
+        text: text,
+        image: null,
+        timestamp: new Date().toISOString(),
+        likes: 0,
+        comments: []
+      };
+      posts.unshift(newPost);
+      renderPosts();
+      document.getElementById('postText').value = '';
     }
-  });
-</script>
+  }
 
-</body>
-</html>
+  function likePost(index) {
+    posts[index].likes++;
+    renderPosts();
+  }
+
+  function commentPost(index) {
+    const comment = prompt("Écrivez votre commentaire :");
+    if (comment) {
+      posts[index].comments.push(comment);
+      renderPosts();
+    }
+  }
+
+  function sharePost(index) {
+    alert("Publication partagée !");
+  }
+
+  function renderPosts() {
+    const container = document.getElementById('postsContainer');
+    container.innerHTML = '';
+    posts.forEach((post, index) => {
+      const div = document.createElement('div');
+      div.className = 'card post';
+      div.innerHTML = `
+        <div class="author">${post.author} • ${new Date(post.timestamp).toLocaleString()}</div>
+        <div class="text">${post.text}</div>
+        ${post.image ? `<img src="${post.image}" alt="Publication">` : ''}
+        <div class="actions" style="margin-top:10px;">
+          <button onclick="likePost(${index})">❤️ Like (${post.likes})</button>
+          <button onclick="commentPost(${index})">💬 Commenter (${post.comments.length})</button>
+          <button onclick="sharePost(${index})">🔄 Partager</button>
+        </div>
+        ${post.comments.length > 0 ? `
+          <div class="comments" style="margin-top:10px;">
+            <strong>Commentaires :</strong>
+            <ul style="padding-left: 20px; margin-top: 5px;">
+              ${post.comments.map(c => `<li>${c}</li>`).join('')}
+            </ul>
+          </div>
+        ` : ''}
+      `;
+      container.appendChild(div);
+    });
+  }
+</script>
