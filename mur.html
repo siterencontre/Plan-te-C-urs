@@ -2,76 +2,78 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Mur - Planète Cœurs</title>
+  <title>Mur – Planète Cœurs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background: #fff0f5;
-      color: #333;
+      margin: 0;
+      padding: 0;
     }
 
     header {
       background-color: #ff69b4;
+      color: white;
       padding: 15px;
       text-align: center;
-      color: white;
-      font-size: 28px;
-      font-weight: bold;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      background-color: #ffc0cb;
-      padding: 10px;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
+      font-size: 24px;
       font-weight: bold;
     }
 
     .container {
       max-width: 600px;
-      margin: 30px auto;
+      margin: 20px auto;
       background: white;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    .post-form textarea {
-      width: 100%;
-      height: 100px;
-      padding: 10px;
       border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      border-radius: 8px;
       border: 1px solid #ccc;
-      resize: none;
+      padding: 10px;
+      font-size: 16px;
+      resize: vertical;
     }
 
-    .post-form input[type="file"] {
-      margin: 10px 0;
+    input[type="file"] {
+      border: none;
     }
 
-    .post-form button {
+    button {
+      padding: 10px;
       background-color: #ff69b4;
       color: white;
-      padding: 10px 20px;
       border: none;
-      border-radius: 12px;
+      border-radius: 8px;
       cursor: pointer;
-      margin-top: 10px;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ff1493;
+    }
+
+    .posts {
+      margin-top: 30px;
     }
 
     .post {
-      border-top: 1px solid #eee;
-      margin-top: 20px;
-      padding-top: 20px;
+      background: #ffe4ec;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
     }
 
     .post img {
@@ -79,71 +81,63 @@
       border-radius: 10px;
       margin-top: 10px;
     }
-
-    .post .author {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .post .actions {
-      margin-top: 10px;
-    }
-
-    .post .actions button {
-      background: none;
-      border: none;
-      color: #ff69b4;
-      cursor: pointer;
-      margin-right: 10px;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        margin: 10px;
-        padding: 15px;
-      }
-    }
   </style>
 </head>
 <body>
-
-  <header>
-    💖 Planète Cœurs
-  </header>
-
-  <nav>
-    <a href="#">Accueil</a>
-    <a href="profil.html">Profil</a>
-    <a href="login.html">Déconnexion</a>
-  </nav>
+  <header>💖 Planète Cœurs – Mur</header>
 
   <div class="container">
-    <form class="post-form">
-      <textarea placeholder="Exprime tes sentiments... 💬"></textarea>
-      <input type="file" accept="image/*">
-      <button type="submit">Publier 💕</button>
+    <form class="post-form" id="postForm">
+      <textarea id="postContent" placeholder="Exprimez-vous avec amour..."></textarea>
+      <input type="file" id="postImage" accept="image/*">
+      <button type="submit">Publier</button>
     </form>
 
-    <div class="post">
-      <div class="author">❤️ Venceslas</div>
-      <div class="content">Aujourd'hui, je pense à toi... 🌹</div>
-      <img src="https://placekitten.com/400/250" alt="Image postée">
-      <div class="actions">
-        <button>❤️ J’aime</button>
-        <button>💬 Commenter</button>
-      </div>
-    </div>
-
-    <div class="post">
-      <div class="author">💖 Rosalie</div>
-      <div class="content">Un jour, nos cœurs se retrouveront... ✨</div>
-      <img src="https://placekitten.com/401/250" alt="Image postée">
-      <div class="actions">
-        <button>❤️ J’aime</button>
-        <button>💬 Commenter</button>
-      </div>
+    <div class="posts" id="postsContainer">
+      <!-- Les publications apparaîtront ici -->
     </div>
   </div>
 
+  <script>
+    const form = document.getElementById('postForm');
+    const content = document.getElementById('postContent');
+    const imageInput = document.getElementById('postImage');
+    const postsContainer = document.getElementById('postsContainer');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const text = content.value.trim();
+      const file = imageInput.files[0];
+
+      if (!text && !file) {
+        alert("Veuillez écrire quelque chose ou ajouter une image.");
+        return;
+      }
+
+      const post = document.createElement('div');
+      post.className = 'post';
+
+      const textNode = document.createElement('p');
+      textNode.textContent = text;
+      post.appendChild(textNode);
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          post.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      postsContainer.prepend(post);
+
+      // Réinitialiser le formulaire
+      content.value = '';
+      imageInput.value = '';
+    });
+  </script>
 </body>
 </html>
