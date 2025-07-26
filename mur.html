@@ -1,90 +1,128 @@
-<!-- ... Le code HTML reste inchangé jusqu'à la fin de <script> ... -->
-
-<script>
-  let posts = [];
-
-  function publishPost() {
-    const text = document.getElementById('postText').value;
-    const imageInput = document.getElementById('postImage');
-    const image = imageInput.files[0];
-
-    if (!text && !image) return alert("Écrivez un texte ou ajoutez une image.");
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const newPost = {
-        author: "Vous",
-        text: text,
-        image: image ? e.target.result : null,
-        timestamp: new Date().toISOString(),
-        likes: 0,
-        comments: []
-      };
-      posts.unshift(newPost);
-      renderPosts();
-      document.getElementById('postText').value = '';
-      document.getElementById('postImage').value = '';
-    };
-
-    if (image) {
-      reader.readAsDataURL(image);
-    } else {
-      const newPost = {
-        author: "Vous",
-        text: text,
-        image: null,
-        timestamp: new Date().toISOString(),
-        likes: 0,
-        comments: []
-      };
-      posts.unshift(newPost);
-      renderPosts();
-      document.getElementById('postText').value = '';
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mur - Planète Cœurs</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff0f5;
+      color: #333;
     }
-  }
-
-  function likePost(index) {
-    posts[index].likes++;
-    renderPosts();
-  }
-
-  function commentPost(index) {
-    const comment = prompt("Écrivez votre commentaire :");
-    if (comment) {
-      posts[index].comments.push(comment);
-      renderPosts();
+    header {
+      background-color: #ff66b2;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-  }
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    nav a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .post-form textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      resize: none;
+      font-size: 16px;
+    }
+    .post-form input[type="file"] {
+      margin-top: 10px;
+    }
+    .post-form button {
+      margin-top: 10px;
+      background-color: #ff66b2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .post {
+      background-color: #fff0f9;
+      border: 1px solid #ffcce6;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 16px;
+    }
+    .post img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+    .buttons {
+      margin-top: 10px;
+      display: flex;
+      gap: 15px;
+    }
+    .buttons button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      color: #ff3399;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>❤️ Planète Cœurs</h1>
+    <nav>
+      <a href="#">Accueil</a>
+      <a href="#">Profil</a>
+      <a href="#">Paramètres</a>
+      <a href="#">Déconnexion</a>
+    </nav>
+  </header>
 
-  function sharePost(index) {
-    alert("Publication partagée !");
-  }
+  <div class="container">
+    <div class="post-form">
+      <textarea placeholder="Exprimez vos pensées romantiques..."></textarea>
+      <input type="file" accept="image/*" />
+      <button>Publier</button>
+    </div>
 
-  function renderPosts() {
-    const container = document.getElementById('postsContainer');
-    container.innerHTML = '';
-    posts.forEach((post, index) => {
-      const div = document.createElement('div');
-      div.className = 'card post';
-      div.innerHTML = `
-        <div class="author">${post.author} • ${new Date(post.timestamp).toLocaleString()}</div>
-        <div class="text">${post.text}</div>
-        ${post.image ? `<img src="${post.image}" alt="Publication">` : ''}
-        <div class="actions" style="margin-top:10px;">
-          <button onclick="likePost(${index})">❤️ Like (${post.likes})</button>
-          <button onclick="commentPost(${index})">💬 Commenter (${post.comments.length})</button>
-          <button onclick="sharePost(${index})">🔄 Partager</button>
-        </div>
-        ${post.comments.length > 0 ? `
-          <div class="comments" style="margin-top:10px;">
-            <strong>Commentaires :</strong>
-            <ul style="padding-left: 20px; margin-top: 5px;">
-              ${post.comments.map(c => `<li>${c}</li>`).join('')}
-            </ul>
-          </div>
-        ` : ''}
-      `;
-      container.appendChild(div);
-    });
-  }
-</script>
+    <!-- Exemple de publication romantique -->
+    <div class="post">
+      <p>🌹 L'amour est la plus belle poésie que la vie peut écrire.</p>
+      <img src="https://via.placeholder.com/600x300.png?text=Image+romantique" alt="Publication romantique" />
+      <div class="buttons">
+        <button>❤️ J’aime</button>
+        <button>💬 Commenter</button>
+        <button>🔁 Partager</button>
+      </div>
+    </div>
+
+    <div class="post">
+      <p>💖 Une pensée pour toi, qui fais battre mon cœur chaque jour.</p>
+      <div class="buttons">
+        <button>❤️ J’aime</button>
+        <button>💬 Commenter</button>
+        <button>🔁 Partager</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
