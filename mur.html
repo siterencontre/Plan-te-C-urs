@@ -26,11 +26,32 @@ header {
   top: 0;
   z-index: 100;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
+.left-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+}
+
+.search-bar {
+  flex: 1;
+  max-width: 300px;
+  margin: 10px auto;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
 }
 
 .menu-icons {
@@ -60,19 +81,14 @@ header {
   font-size: 10px;
 }
 
-nav {
-  display: flex;
-  gap: 15px;
-}
-
-nav a {
+.menu-button {
+  font-size: 24px;
   color: white;
-  text-decoration: none;
-  font-weight: bold;
+  cursor: pointer;
 }
 
-nav a:hover {
-  text-decoration: underline;
+nav {
+  display: none;
 }
 
 .container {
@@ -175,18 +191,20 @@ textarea {
   </style>
 </head>
 <body>  <header>
-    <div class="logo">🌸 Planète Cœurs</div>
+    <div class="left-header">
+      <img src="logo-planete-coeurs.png" alt="Logo" class="logo-img">
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Rechercher...">
+    </div>
     <div class="menu-icons">
       <a href="#" title="Amis"><i class="fas fa-user-friends"></i><span class="badge">3</span></a>
       <a href="#" title="Messages"><i class="fas fa-envelope"></i><span class="badge">5</span></a>
       <a href="#" title="Notifications"><i class="fas fa-bell"></i><span class="badge">2</span></a>
+      <div class="menu-button" onclick="alert('Menu: Profil, Paramètres, Déconnexion')">
+        <i class="fas fa-bars"></i>
+      </div>
     </div>
-    <nav>
-      <a href="mur.html">Accueil</a>
-      <a href="profil.html">Profil</a>
-      <a href="parametres.html">Paramètres</a>
-      <a href="index.html">Déconnexion</a>
-    </nav>
   </header>  <div class="container">
     <div class="sidebar">
       <h3>💕 Menu</h3>
