@@ -1,283 +1,155 @@
 <!DOCTYPE html><html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Planète Cœurs - Mur</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mur - Planète Cœurs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * {
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff0f5;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }body {
-  background-color: #fff0f5;
-  color: #333;
-}
-
-header {
-  background-color: #ff69b4;
-  color: white;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  flex-wrap: wrap;
-}
-
-.left-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.logo-img {
-  height: 40px;
-  width: auto;
-}
-
-.search-bar {
-  flex: 1;
-  max-width: 300px;
-  margin: 10px auto;
-}
-
-.search-bar input {
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: 20px;
-  border: none;
-  outline: none;
-}
-
-.menu-icons {
-  display: flex;
-  gap: 20px;
-  font-size: 18px;
-}
-
-.menu-icons a {
-  color: white;
-  text-decoration: none;
-  position: relative;
-}
-
-.menu-icons a:hover {
-  color: #ffe4e1;
-}
-
-.menu-icons a span.badge {
-  position: absolute;
-  top: -8px;
-  right: -10px;
-  background: red;
-  color: white;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 10px;
-}
-
-.menu-button {
-  font-size: 24px;
-  color: white;
-  cursor: pointer;
-}
-
-nav {
-  display: none;
-}
-
-.container {
-  display: flex;
-  max-width: 1200px;
-  margin: 20px auto;
-  gap: 20px;
-}
-
-.sidebar {
-  width: 20%;
-  background-color: #ffe4e1;
-  padding: 15px;
-  border-radius: 10px;
-  height: fit-content;
-}
-
-.sidebar h3 {
-  margin-bottom: 10px;
-}
-
-.sidebar ul {
-  list-style: none;
-}
-
-.sidebar li a {
-  text-decoration: none;
-  color: #333;
-  display: block;
-  padding: 5px 0;
-}
-
-.sidebar li a:hover {
-  color: #ff1493;
-}
-
-.main {
-  flex: 1;
-}
-
-.card {
-  background: white;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
-}
-
-textarea {
-  width: 100%;
-  height: 80px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  resize: none;
-}
-
-.form-group {
-  margin-top: 10px;
-}
-
-.form-group input[type="file"] {
-  margin-top: 10px;
-}
-
-.btn {
-  background-color: #ff69b4;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 20px;
-  color: white;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.btn:hover {
-  background-color: #ff1493;
-}
-
-.post {
-  margin-top: 20px;
-}
-
-.post img {
-  max-width: 100%;
-  border-radius: 10px;
-  margin-top: 10px;
-}
-
-.post .author {
-  font-weight: bold;
-  color: #ff1493;
-  margin-bottom: 5px;
-}
-
-.post .text {
-  margin-top: 5px;
-}
-
+    }
+    header {
+      background-color: #ff69b4;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 15px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    .logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+    .search-bar {
+      flex-grow: 1;
+      margin: 0 15px;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 5px 10px;
+      border-radius: 20px;
+      border: none;
+    }
+    .top-icons i {
+      margin: 0 10px;
+      cursor: pointer;
+    }
+    nav {
+      background-color: #ffe6f0;
+      padding: 10px;
+    }
+    .profile-section {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+    }
+    .profile-section img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+    .profile-section a {
+      color: #d63384;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .post-box {
+      background-color: white;
+      margin: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    .file-input {
+      margin-top: 10px;
+    }
+    .publish-btn {
+      margin-top: 10px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    .menu-button {
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .side-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #fff0f5;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+      padding: 20px;
+    }
+    .side-menu a {
+      display: block;
+      margin: 15px 0;
+      color: #d63384;
+      text-decoration: none;
+      font-weight: bold;
+    }
   </style>
 </head>
-<body>  <header>
-    <div class="left-header">
-      <img src="logo-planete-coeurs.png" alt="Logo" class="logo-img">
+<body>
+  <header>
+    <div class="logo">
+      <img src="logo-planete-coeurs.png" alt="Logo Planète Cœurs">
     </div>
     <div class="search-bar">
       <input type="text" placeholder="Rechercher...">
     </div>
-    <div class="menu-icons">
-      <a href="#" title="Amis"><i class="fas fa-user-friends"></i><span class="badge">3</span></a>
-      <a href="#" title="Messages"><i class="fas fa-envelope"></i><span class="badge">5</span></a>
-      <a href="#" title="Notifications"><i class="fas fa-bell"></i><span class="badge">2</span></a>
-      <div class="menu-button" onclick="alert('Menu: Profil, Paramètres, Déconnexion')">
-        <i class="fas fa-bars"></i>
-      </div>
+    <div class="top-icons">
+      <i class="fas fa-user-circle"></i>
+      <i class="fas fa-envelope"></i>
+      <i class="fas fa-bell"></i>
     </div>
-  </header>  <div class="container">
-    <div class="sidebar">
-      <h3>💕 Menu</h3>
-      <ul>
-        <li><a href="#">Suggestions d’amis</a></li>
-        <li><a href="#">Messages</a></li>
-        <li><a href="#">Stories</a></li>
-      </ul>
-    </div><div class="main">
-  <div class="card">
+    <div class="menu-button" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+  </header>  <div class="side-menu" id="sideMenu">
+    <a href="#">Paramètres</a>
+    <a href="#">Déconnexion</a>
+  </div>  <nav>
+    <div class="profile-section">
+      <img src="photo-profil.jpg" alt="Profil Utilisateur">
+      <a href="#">Mon profil</a>
+    </div>
+  </nav>  <div class="post-box">
     <h3>Exprimez vos pensées romantiques...</h3>
-    <textarea id="postText" placeholder="Écrivez quelque chose de doux..."></textarea>
-    <div class="form-group">
-      <input type="file" id="postImage" accept="image/*">
+    <textarea placeholder="Écrivez quelque chose de doux..."></textarea>
+    <div class="file-input">
+      <input type="file" />
     </div>
-    <button class="btn" onclick="publishPost()">Publier</button>
-  </div>
-
-  <div id="postsContainer"></div>
-</div>
-
+    <button class="publish-btn">Publier</button>
   </div>  <script>
-    let posts = [];
-
-    function publishPost() {
-      const text = document.getElementById('postText').value;
-      const imageInput = document.getElementById('postImage');
-      const image = imageInput.files[0];
-
-      if (!text && !image) return alert("Écrivez un texte ou ajoutez une image.");
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const newPost = {
-          author: "Vous",
-          text: text,
-          image: image ? e.target.result : null,
-          timestamp: new Date().toISOString()
-        };
-        posts.unshift(newPost);
-        renderPosts();
-        document.getElementById('postText').value = '';
-        document.getElementById('postImage').value = '';
-      };
-
-      if (image) {
-        reader.readAsDataURL(image);
-      } else {
-        const newPost = {
-          author: "Vous",
-          text: text,
-          image: null,
-          timestamp: new Date().toISOString()
-        };
-        posts.unshift(newPost);
-        renderPosts();
-        document.getElementById('postText').value = '';
-      }
-    }
-
-    function renderPosts() {
-      const container = document.getElementById('postsContainer');
-      container.innerHTML = '';
-      posts.forEach(post => {
-        const div = document.createElement('div');
-        div.className = 'card post';
-        div.innerHTML = `
-          <div class="author">${post.author} • ${new Date(post.timestamp).toLocaleString()}</div>
-          <div class="text">${post.text}</div>
-          ${post.image ? `<img src="${post.image}" alt="Publication">` : ''}
-        `;
-        container.appendChild(div);
-      });
+    function toggleMenu() {
+      const menu = document.getElementById('sideMenu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
   </script></body>
 </html>
