@@ -1,143 +1,146 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mur – Planète Cœurs</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
+      margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background: #fff0f5;
-      margin: 0;
-      padding: 0;
+      color: #333;
     }
 
     header {
-      background-color: #ff69b4;
-      color: white;
+      background-color: #e75480;
       padding: 15px;
       text-align: center;
-      font-size: 24px;
+      color: white;
+      font-size: 1.5em;
       font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     .container {
       max-width: 600px;
       margin: 20px auto;
+      padding: 10px;
+    }
+
+    .post-box {
       background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
     }
 
-    .post-form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    textarea {
+    .post-box textarea {
       width: 100%;
-      min-height: 80px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      padding: 10px;
-      font-size: 16px;
-      resize: vertical;
-    }
-
-    input[type="file"] {
       border: none;
+      resize: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 1em;
+      background: #f9f9f9;
+      margin-bottom: 10px;
     }
 
-    button {
-      padding: 10px;
-      background-color: #ff69b4;
+    .post-box button {
+      background-color: #e75480;
       color: white;
+      padding: 10px 16px;
       border: none;
-      border-radius: 8px;
+      border-radius: 20px;
       cursor: pointer;
-      font-size: 16px;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #ff1493;
-    }
-
-    .posts {
-      margin-top: 30px;
+      float: right;
     }
 
     .post {
-      background: #ffe4ec;
-      border-radius: 12px;
+      background: #fff;
       padding: 15px;
-      margin-bottom: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
-    .post img {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-top: 10px;
+    .post .info {
+      font-weight: bold;
+      color: #e75480;
+      margin-bottom: 5px;
+    }
+
+    .post .content {
+      margin-bottom: 10px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-around;
+      color: #e75480;
+      font-size: 0.9em;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+
+    .actions span {
+      cursor: pointer;
+    }
+
+    @media screen and (max-width: 600px) {
+      .container {
+        padding: 0 10px;
+      }
     }
   </style>
 </head>
 <body>
-  <header>💖 Planète Cœurs – Mur</header>
+  <header>💞 Mur de Planète Cœurs</header>
 
   <div class="container">
-    <form class="post-form" id="postForm">
-      <textarea id="postContent" placeholder="Exprimez-vous avec amour..."></textarea>
-      <input type="file" id="postImage" accept="image/*">
-      <button type="submit">Publier</button>
-    </form>
+    <div class="post-box">
+      <textarea id="newPost" rows="3" placeholder="Exprime ton cœur..."></textarea>
+      <button onclick="ajouterPost()">Publier</button>
+      <div style="clear: both;"></div>
+    </div>
 
-    <div class="posts" id="postsContainer">
+    <div id="mur">
       <!-- Les publications apparaîtront ici -->
     </div>
   </div>
 
   <script>
-    const form = document.getElementById('postForm');
-    const content = document.getElementById('postContent');
-    const imageInput = document.getElementById('postImage');
-    const postsContainer = document.getElementById('postsContainer');
+    const mur = document.getElementById('mur');
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const text = content.value.trim();
-      const file = imageInput.files[0];
-
-      if (!text && !file) {
-        alert("Veuillez écrire quelque chose ou ajouter une image.");
-        return;
-      }
+    function ajouterPost() {
+      const contenu = document.getElementById('newPost').value;
+      if (contenu.trim() === '') return;
 
       const post = document.createElement('div');
       post.className = 'post';
+      post.innerHTML = `
+        <div class="info">❤️ Anonyme</div>
+        <div class="content">${contenu}</div>
+        <div class="actions">
+          <span onclick="reagir(this)">💗 J’aime</span>
+          <span>💬 Commenter</span>
+          <span>🔁 Partager</span>
+        </div>
+      `;
+      mur.prepend(post);
+      document.getElementById('newPost').value = '';
+    }
 
-      const textNode = document.createElement('p');
-      textNode.textContent = text;
-      post.appendChild(textNode);
-
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          post.appendChild(img);
-        };
-        reader.readAsDataURL(file);
+    function reagir(element) {
+      if (element.textContent.includes('💗')) {
+        element.textContent = '💞 Aimé';
+        element.style.color = '#ff1493';
+      } else {
+        element.textContent = '💗 J’aime';
+        element.style.color = '#e75480';
       }
-
-      postsContainer.prepend(post);
-
-      // Réinitialiser le formulaire
-      content.value = '';
-      imageInput.value = '';
-    });
+    }
   </script>
 </body>
 </html>
