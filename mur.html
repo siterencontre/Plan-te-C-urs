@@ -1,100 +1,117 @@
-m <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mur | Planète Cœurs</title>
+  <title>Planète Cœurs - Mur</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: #fff0f5;
     }
-
     header {
-      background-color: #d63384;
+      background-color: #ff69b4;
       color: white;
-      padding: 15px;
+      padding: 20px;
       text-align: center;
       font-size: 24px;
       font-weight: bold;
+      letter-spacing: 1px;
     }
-
     .container {
       max-width: 600px;
-      margin: 30px auto;
-      padding: 10px;
+      margin: 20px auto;
+      padding: 15px;
       background: white;
-      border-radius: 15px;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-
-    .poster {
+    .publish {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-
     textarea {
-      width: 100%;
-      height: 80px;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
       resize: none;
-      font-family: inherit;
-    }
-
-    button {
-      background-color: #d63384;
-      color: white;
       padding: 10px;
-      border: none;
-      border-radius: 8px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      min-height: 80px;
+      font-size: 16px;
+    }
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .actions input[type="file"] {
+      display: none;
+    }
+    .actions label {
       cursor: pointer;
+      color: #ff69b4;
+      font-weight: bold;
     }
-
+    button {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
     button:hover {
-      background-color: #c21868;
+      background-color: #ff1493;
     }
-
-    .publication {
-      background-color: #ffe6f0;
-      border-radius: 10px;
+    .post {
+      background: #fff0f8;
+      border: 1px solid #ffe0ec;
+      border-radius: 16px;
       padding: 15px;
       margin-top: 20px;
     }
-
-    .publication h4 {
-      margin: 0 0 5px;
-      color: #b30059;
+    .post .user {
+      font-weight: bold;
+      color: #d63384;
     }
-
-    .publication p {
-      margin: 5px 0;
+    .post .content {
+      margin: 10px 0;
+      font-size: 15px;
     }
-
-    .publication img {
+    .post .actions {
+      display: flex;
+      gap: 15px;
+      font-size: 14px;
+      color: #ff69b4;
+      cursor: pointer;
+    }
+    .preview {
       max-width: 100%;
-      border-radius: 10px;
+      border-radius: 12px;
       margin-top: 10px;
     }
   </style>
 </head>
 <body>
-
-  <header>💖 Planète Cœurs – Mur d’Amour</header>
+  <header>
+    💕 Planète Cœurs - Mur 💕
+  </header>
 
   <div class="container">
-    <div class="poster">
-      <textarea id="message" placeholder="Exprime ton amour..."></textarea>
-      <button onclick="publier()">Publier</button>
+    <div class="publish">
+      <textarea id="postText" placeholder="Exprimez vos sentiments..."></textarea>
+      <div class="actions">
+        <label for="imageUpload">📷 Ajouter une image</label>
+        <input type="file" id="imageUpload" accept="image/*">
+        <button onclick="publishPost()">Publier</button>
+      </div>
     </div>
 
-    <div id="mur"></div>
+    <div id="postsContainer"></div>
   </div>
 
   <script src="mur.js"></script>
-
 </body>
 </html>
