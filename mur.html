@@ -1,146 +1,100 @@
-<!DOCTYPE html>
+m <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mur – Planète Cœurs</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mur | Planète Cœurs</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #fff0f5;
-      color: #333;
+      background-color: #fff0f5;
     }
 
     header {
-      background-color: #e75480;
+      background-color: #d63384;
+      color: white;
       padding: 15px;
       text-align: center;
-      color: white;
-      font-size: 1.5em;
+      font-size: 24px;
       font-weight: bold;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     .container {
       max-width: 600px;
-      margin: 20px auto;
+      margin: 30px auto;
       padding: 10px;
-    }
-
-    .post-box {
       background: white;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
+      border-radius: 15px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
     }
 
-    .post-box textarea {
-      width: 100%;
-      border: none;
-      resize: none;
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 1em;
-      background: #f9f9f9;
-      margin-bottom: 10px;
-    }
-
-    .post-box button {
-      background-color: #e75480;
-      color: white;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      float: right;
-    }
-
-    .post {
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    .post .info {
-      font-weight: bold;
-      color: #e75480;
-      margin-bottom: 5px;
-    }
-
-    .post .content {
-      margin-bottom: 10px;
-    }
-
-    .actions {
+    .poster {
       display: flex;
-      justify-content: space-around;
-      color: #e75480;
-      font-size: 0.9em;
-      border-top: 1px solid #eee;
-      padding-top: 10px;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .actions span {
+    textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+      font-family: inherit;
+    }
+
+    button {
+      background-color: #d63384;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
     }
 
-    @media screen and (max-width: 600px) {
-      .container {
-        padding: 0 10px;
-      }
+    button:hover {
+      background-color: #c21868;
+    }
+
+    .publication {
+      background-color: #ffe6f0;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+
+    .publication h4 {
+      margin: 0 0 5px;
+      color: #b30059;
+    }
+
+    .publication p {
+      margin: 5px 0;
+    }
+
+    .publication img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <header>💞 Mur de Planète Cœurs</header>
+
+  <header>💖 Planète Cœurs – Mur d’Amour</header>
 
   <div class="container">
-    <div class="post-box">
-      <textarea id="newPost" rows="3" placeholder="Exprime ton cœur..."></textarea>
-      <button onclick="ajouterPost()">Publier</button>
-      <div style="clear: both;"></div>
+    <div class="poster">
+      <textarea id="message" placeholder="Exprime ton amour..."></textarea>
+      <button onclick="publier()">Publier</button>
     </div>
 
-    <div id="mur">
-      <!-- Les publications apparaîtront ici -->
-    </div>
+    <div id="mur"></div>
   </div>
 
-  <script>
-    const mur = document.getElementById('mur');
+  <script src="mur.js"></script>
 
-    function ajouterPost() {
-      const contenu = document.getElementById('newPost').value;
-      if (contenu.trim() === '') return;
-
-      const post = document.createElement('div');
-      post.className = 'post';
-      post.innerHTML = `
-        <div class="info">❤️ Anonyme</div>
-        <div class="content">${contenu}</div>
-        <div class="actions">
-          <span onclick="reagir(this)">💗 J’aime</span>
-          <span>💬 Commenter</span>
-          <span>🔁 Partager</span>
-        </div>
-      `;
-      mur.prepend(post);
-      document.getElementById('newPost').value = '';
-    }
-
-    function reagir(element) {
-      if (element.textContent.includes('💗')) {
-        element.textContent = '💞 Aimé';
-        element.style.color = '#ff1493';
-      } else {
-        element.textContent = '💗 J’aime';
-        element.style.color = '#e75480';
-      }
-    }
-  </script>
 </body>
 </html>
