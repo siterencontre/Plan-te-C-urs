@@ -1,153 +1,437 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Planète Cœurs - Mur</title>
   <style>
-    :root {
-      --rose: #fbb6ce;
-      --rose-foncé: #e53e7d;
-      --blanc: #fff;
-      --gris-clair: #f7f7f7;
-      --gris: #ccc;
-      --noir: #222;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
     }
 
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--gris-clair);
-      color: var(--noir);
+      background-color: #fff0f5;
+      color: #333;
     }
 
     header {
-      background: var(--rose);
-      padding: 15px 20px;
+      background-color: #ff69b4;
+      color: white;
+      padding: 10px 20px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    header h1 {
-      font-size: 24px;
-      color: var(--rose-foncé);
-      margin: 0;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .logo {
-      font-weight: bold;
       font-size: 24px;
-    }
-
-    nav {
-      display: flex;
-      gap: 15px;
+      font-weight: bold;
     }
 
     nav a {
-      text-decoration: none;
-      color: var(--rose-foncé);
-      font-weight: 600;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 0 15px;
-    }
-
-    .post-form {
-      background: var(--blanc);
-      padding: 15px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(255, 192, 203, 0.2);
-    }
-
-    .post-form textarea {
-      width: 100%;
-      padding: 10px;
-      resize: none;
-      border-radius: 10px;
-      border: 1px solid var(--gris);
-      margin-bottom: 10px;
-      font-size: 16px;
-    }
-
-    .post-form input[type="file"] {
-      margin-bottom: 10px;
-    }
-
-    .post-form button {
-      background: var(--rose-foncé);
       color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 10px;
-      cursor: pointer;
+      text-decoration: none;
+      margin: 0 10px;
       font-weight: bold;
     }
 
-    .post {
-      background: white;
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      display: flex;
+      max-width: 1200px;
+      margin: 20px auto;
+      gap: 20px;
+    }
+
+    .sidebar {
+      width: 20%;
+      background-color: #ffe4e1;
       padding: 15px;
-      border-radius: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      height: fit-content;
+    }
+
+    .main {
+      flex: 1;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+    }
+
+    .form-group {
+      margin-top: 10px;
+    }
+
+    .form-group input[type="file"] {
+      margin-top: 10px;
+    }
+
+    .btn {
+      background-color: #ff69b4;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background-color: #ff1493;
+    }
+
+    .post {
+      margin-top: 20px;
     }
 
     .post img {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-      margin-top: 10px;
+      max-width: 100%;
       border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .post .author {
+      font-weight: bold;
+      color: #ff1493;
+      margin-bottom: 5px;
     }
 
     .post .text {
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      nav {
-        flex-wrap: wrap;
-      }
+      margin-top: 5px;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1 class="logo">🌸 Planète Cœurs</h1>
+    <div class="logo">🌸 Planète Cœurs</div>
     <nav>
-      <a href="#">Accueil</a>
-      <a href="#">Profil</a>
-      <a href="#">Paramètres</a>
+      <a href="mur.html">Accueil</a>
+      <a href="profil.html">Profil</a>
+      <a href="parametres.html">Paramètres</a>
       <a href="index.html">Déconnexion</a>
     </nav>
   </header>
 
   <div class="container">
-    <div class="post-form">
-      <textarea id="postText" rows="4" placeholder="Exprimez vos pensées romantiques..."></textarea>
-      <input type="file" id="postImage" accept="image/*" />
-      <button onclick="publishPost()">Publier</button>
+    <div class="sidebar">
+      <h3>💕 Menu</h3>
+      <ul>
+        <li><a href="#">Suggestions d’amis</a></li>
+        <li><a href="#">Messages</a></li>
+        <li><a href="#">Stories</a></li>
+      </ul>
     </div>
 
-    <div id="feed">
-      <!-- Les publications s'affichent ici -->
+    <div class="main">
+      <div class="card">
+        <h3>Exprimez vos pensées romantiques...</h3>
+        <textarea id="postText" placeholder="Écrivez quelque chose de doux..."></textarea>
+        <div class="form-group">
+          <input type="file" id="postImage" accept="image/*">
+        </div>
+        <button class="btn" onclick="publishPost()">Publier</button>
+      </div>
+
+      <div id="postsContainer"></div>
     </div>
   </div>
 
-  <script src="mur.js"></script>
+  <script>
+    let posts = [];
+
+    function publishPost() {
+      const text = document.getElementById('postText').value;
+      const imageInput = document.getElementById('postImage');
+      const image = imageInput.files[0];
+
+      if (!text && !image) return alert("Écrivez un texte ou ajoutez une image.");
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const newPost = {
+          author: "Vous",
+          text: text,
+          image: image ? e.target.result : null,
+          timestamp: new Date().toISOString()
+        };
+        posts.unshift(newPost);
+        renderPosts();
+        document.getElementById('postText').value = '';
+        document.getElementById('postImage').value = '';
+      };
+
+      if (image) {
+        reader.readAsDataURL(image);
+      } else {
+        const newPost = {
+          author: "Vous",
+          text: text,
+          image: null,
+          timestamp: new Date().toISOString()
+        };
+        posts.unshift(newPost);
+        renderPosts();
+        document.getElementById('postText').value = '';
+      }
+    }
+
+    function renderPosts() {
+      const container = document.getElementById('postsContainer');
+      container.innerHTML = '';
+      posts.forEach(post => {
+        const div = document.createElement('div');
+        div.className = 'card post';
+        div.innerHTML = `
+          <div class="author">${post.author} • ${new Date(post.timestamp).toLocaleString()}</div>
+          <div class="text">${post.text}</div>
+          ${post.image ? `<img src="${post.image}" alt="Publication">` : ''}
+        `;
+        container.appendChild(div);
+      });
+    }
+  </script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planète Cœurs - Mur</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #fff0f5;
+      color: #333;
+    }
+
+    header {
+      background-color: #ff69b4;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      display: flex;
+      max-width: 1200px;
+      margin: 20px auto;
+      gap: 20px;
+    }
+
+    .sidebar {
+      width: 20%;
+      background-color: #ffe4e1;
+      padding: 15px;
+      border-radius: 10px;
+      height: fit-content;
+    }
+
+    .main {
+      flex: 1;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+    }
+
+    .form-group {
+      margin-top: 10px;
+    }
+
+    .form-group input[type="file"] {
+      margin-top: 10px;
+    }
+
+    .btn {
+      background-color: #ff69b4;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background-color: #ff1493;
+    }
+
+    .post {
+      margin-top: 20px;
+    }
+
+    .post img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .post .author {
+      font-weight: bold;
+      color: #ff1493;
+      margin-bottom: 5px;
+    }
+
+    .post .text {
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">🌸 Planète Cœurs</div>
+    <nav>
+      <a href="mur.html">Accueil</a>
+      <a href="profil.html">Profil</a>
+      <a href="parametres.html">Paramètres</a>
+      <a href="index.html">Déconnexion</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="sidebar">
+      <h3>💕 Menu</h3>
+      <ul>
+        <li><a href="#">Suggestions d’amis</a></li>
+        <li><a href="#">Messages</a></li>
+        <li><a href="#">Stories</a></li>
+      </ul>
+    </div>
+
+    <div class="main">
+      <div class="card">
+        <h3>Exprimez vos pensées romantiques...</h3>
+        <textarea id="postText" placeholder="Écrivez quelque chose de doux..."></textarea>
+        <div class="form-group">
+          <input type="file" id="postImage" accept="image/*">
+        </div>
+        <button class="btn" onclick="publishPost()">Publier</button>
+      </div>
+
+      <div id="postsContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    let posts = [];
+
+    function publishPost() {
+      const text = document.getElementById('postText').value;
+      const imageInput = document.getElementById('postImage');
+      const image = imageInput.files[0];
+
+      if (!text && !image) return alert("Écrivez un texte ou ajoutez une image.");
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const newPost = {
+          author: "Vous",
+          text: text,
+          image: image ? e.target.result : null,
+          timestamp: new Date().toISOString()
+        };
+        posts.unshift(newPost);
+        renderPosts();
+        document.getElementById('postText').value = '';
+        document.getElementById('postImage').value = '';
+      };
+
+      if (image) {
+        reader.readAsDataURL(image);
+      } else {
+        const newPost = {
+          author: "Vous",
+          text: text,
+          image: null,
+          timestamp: new Date().toISOString()
+        };
+        posts.unshift(newPost);
+        renderPosts();
+        document.getElementById('postText').value = '';
+      }
+    }
+
+    function renderPosts() {
+      const container = document.getElementById('postsContainer');
+      container.innerHTML = '';
+      posts.forEach(post => {
+        const div = document.createElement('div');
+        div.className = 'card post';
+        div.innerHTML = `
+          <div class="author">${post.author} • ${new Date(post.timestamp).toLocaleString()}</div>
+          <div class="text">${post.text}</div>
+          ${post.image ? `<img src="${post.image}" alt="Publication">` : ''}
+        `;
+        container.appendChild(div);
+      });
+    }
+  </script>
+
 </body>
 </html>
