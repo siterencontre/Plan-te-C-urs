@@ -1,117 +1,142 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Planète Cœurs - Mur</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planète Cœurs • Mur</title>
   <style>
     body {
-      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #fff0f5;
+      background: linear-gradient(145deg, #ffe4ec, #fff0f5);
+      margin: 0;
+      padding: 0;
     }
+
     header {
-      background-color: #ff69b4;
+      background-color: #ff4d79;
       color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
       font-weight: bold;
-      letter-spacing: 1px;
     }
-    .container {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 15px;
+
+    main {
+      max-width: 700px;
+      margin: 2rem auto;
       background: white;
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ffc0cb;
+      padding: 1rem;
     }
-    .publish {
+
+    .post-form {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    textarea {
+
+    .post-form textarea {
       resize: none;
+      height: 80px;
       padding: 10px;
-      border-radius: 12px;
-      border: 1px solid #ccc;
-      min-height: 80px;
-      font-size: 16px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ddd;
     }
-    .actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+
+    .post-form input[type="file"] {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 6px;
     }
-    .actions input[type="file"] {
-      display: none;
-    }
-    .actions label {
-      cursor: pointer;
-      color: #ff69b4;
-      font-weight: bold;
-    }
-    button {
-      background-color: #ff69b4;
+
+    .post-form button {
+      background-color: #ff4d79;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 12px;
-      cursor: pointer;
+      padding: 10px;
       font-weight: bold;
-      transition: 0.3s;
+      border-radius: 5px;
+      cursor: pointer;
     }
-    button:hover {
-      background-color: #ff1493;
-    }
+
     .post {
-      background: #fff0f8;
-      border: 1px solid #ffe0ec;
-      border-radius: 16px;
-      padding: 15px;
-      margin-top: 20px;
+      border-top: 1px solid #eee;
+      padding-top: 1rem;
+      margin-top: 1rem;
     }
-    .post .user {
-      font-weight: bold;
-      color: #d63384;
-    }
-    .post .content {
-      margin: 10px 0;
-      font-size: 15px;
-    }
-    .post .actions {
-      display: flex;
-      gap: 15px;
-      font-size: 14px;
-      color: #ff69b4;
-      cursor: pointer;
-    }
-    .preview {
+
+    .post img {
       max-width: 100%;
-      border-radius: 12px;
-      margin-top: 10px;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+    }
+
+    .post h3 {
+      margin: 0.5rem 0 0.2rem;
+      color: #d6336c;
+    }
+
+    .post p {
+      margin: 0.2rem 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    @media (max-width: 600px) {
+      header, main {
+        padding: 1rem;
+      }
     }
   </style>
 </head>
 <body>
+
   <header>
-    💕 Planète Cœurs - Mur 💕
+    <h1>❤️ Planète Cœurs</h1>
+    <nav>
+      <a href="#">Mur</a>
+      <a href="profil.html">Profil</a>
+      <a href="messages.html">Messages</a>
+      <a href="parametres.html">Paramètres</a>
+      <a href="#" onclick="logout()">Déconnexion</a>
+    </nav>
   </header>
 
-  <div class="container">
-    <div class="publish">
-      <textarea id="postText" placeholder="Exprimez vos sentiments..."></textarea>
-      <div class="actions">
-        <label for="imageUpload">📷 Ajouter une image</label>
-        <input type="file" id="imageUpload" accept="image/*">
-        <button onclick="publishPost()">Publier</button>
-      </div>
-    </div>
+  <main>
+    <h2>Exprime ton amour 💖</h2>
+    <form class="post-form" id="postForm">
+      <textarea id="message" placeholder="Exprime-toi..."></textarea>
+      <input type="file" id="imageInput" accept="image/*" />
+      <button type="submit">Publier</button>
+    </form>
 
     <div id="postsContainer"></div>
-  </div>
+  </main>
 
-  <script src="mur.js"></script>
+  <footer>
+    © 2025 Planète Cœurs. L'amour connecté.
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script type="module" src="mur.js"></script>
 </body>
 </html>
