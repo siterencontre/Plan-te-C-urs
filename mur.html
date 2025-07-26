@@ -10,11 +10,11 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #ffe6f0; /* Fond rose clair en bas */
+      background-color: #ffe6f0;
     }
 
     header {
-      background-color: #ffffff; /* Haut en blanc */
+      background-color: #ffffff;
       color: #ff69b4;
       display: flex;
       align-items: center;
@@ -97,6 +97,30 @@
       margin-top: 10px;
     }
 
+    .photo-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #ff69b4;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .photo-icon:hover {
+      color: #c2185b;
+    }
+
+    #imagePreview img {
+      margin-top: 10px;
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+
     .publish-btn {
       margin-top: 10px;
       background-color: #ff69b4;
@@ -131,6 +155,25 @@
       text-decoration: none;
       font-weight: bold;
     }
+
+    /* Publications */
+    .feed {
+      margin: 20px;
+    }
+
+    .post {
+      background-color: white;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+    }
+
+    .post img {
+      max-width: 100%;
+      margin-top: 10px;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -164,18 +207,79 @@
     </div>
   </nav>
 
+  <!-- Zone de publication -->
   <div class="post-box">
-    <textarea placeholder="Que ressentez-vous aujourd’hui?"></textarea>
+    <textarea id="postText" placeholder="Que ressentez-vous aujourd’hui?"></textarea>
+
     <div class="file-input">
-      <input type="file" />
+      <label for="photoUpload" class="photo-icon">
+        <i class="fas fa-image"></i> Ajouter une photo
+      </label>
+      <input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="previewImage(event)" />
     </div>
-    <button class="publish-btn">Publier</button>
+
+    <div id="imagePreview"></div>
+
+    <button class="publish-btn" onclick="publishPost()">Publier</button>
   </div>
+
+  <!-- Mur de publications -->
+  <div class="feed" id="feed"></div>
 
   <script>
     function toggleMenu() {
       const menu = document.getElementById('sideMenu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    let imageDataUrl = '';
+
+    function previewImage(event) {
+      const preview = document.getElementById('imagePreview');
+      preview.innerHTML = '';
+      const file = event.target.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          imageDataUrl = e.target.result;
+          const img = document.createElement('img');
+          img.src = imageDataUrl;
+          preview.appendChild(img);
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function publishPost() {
+      const text = document.getElementById('postText').value.trim();
+      if (text === '' && imageDataUrl === '') {
+        alert("Veuillez écrire un message ou ajouter une photo.");
+        return;
+      }
+
+      const postContainer = document.createElement('div');
+      postContainer.className = 'post';
+
+      if (text !== '') {
+        const p = document.createElement('p');
+        p.textContent = text;
+        postContainer.appendChild(p);
+      }
+
+      if (imageDataUrl !== '') {
+        const img = document.createElement('img');
+        img.src = imageDataUrl;
+        postContainer.appendChild(img);
+      }
+
+      document.getElementById('feed').prepend(postContainer);
+
+      // Réinitialiser
+      document.getElementById('postText').value = '';
+      document.getElementById('imagePreview').innerHTML = '';
+      document.getElementById('photoUpload').value = '';
+      imageDataUrl = '';
     }
   </script>
 
