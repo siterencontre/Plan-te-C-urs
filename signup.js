@@ -7,6 +7,12 @@ import {
   GoogleAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+import {
+  getFirestore,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 // Configuration Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBWMGsMl7Uyqx5mimLiR_lv_u_WCeaU_jY",
@@ -18,53 +24,70 @@ const firebaseConfig = {
   measurementId: "G-SMZTEG955E"
 };
 
-// Initialisation de Firebase
+// Initialisation Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+const db = getFirestore(app);
 
-// Fonction d’inscription avec email/mot de passe
+// Création de compte avec email/mot de passe
 document.getElementById("registerForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  const confirm = document.getElementById("confirmPassword").value;
 
-  if (password !== confirm) {
-    alert("Les mots de passe ne correspondent pas.");
-    return;
-  }
+  // Autres champs supplémentaires (si présents dans votre formulaire)
+  const nom = document.getElementById("nom")?.value || "";
+  const prenom = document.getElementById("prenom")?.value || "";
+  const sexe = document.getElementById("sexe")?.value || "";
+  const dateNaissance = document.getElementById("dateNaissance")?.value || "";
 
-  // Création du compte avec Firebase
   createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
       const user = userCredential.user;
 
-      // Données personnelles (déjà stockées dans localStorage côté HTML)
-      const data = JSON.parse(localStorage.getItem("signupData"));
-      console.log("Utilisateur créé :", user.email, data);
+      // Sauvegarde des données dans Firestore
+      await setDoc(doc(db, "utilisateurs", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        nom: nom,
+        prenom: prenom,
+        sexe: sexe,
+        dateNaissance: dateNaissance,
+        dateInscription: new Date().toISOString()
+      });
 
-      // Redirection après succès
-      alert("Inscription réussie !");
-      window.location.href = "mur.html";
+      alert("Compte créé avec succès !");
+      window.location.href = "mur.html"; // Redirection
     })
     .catch((error) => {
-      console.error(error);
       alert("Erreur : " + error.message);
     });
 });
 
-// Connexion via Google
+// Connexion avec Google
 document.getElementById("googleSignup").addEventListener("click", function () {
   signInWithPopup(auth, provider)
-    .then((result) => {
+    .then(async (result) => {
       const user = result.user;
+
+      // Sauvegarde des données Google par défaut
+      await setDoc(doc(db, "utilisateurs", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        nom: user.displayName || "",
+        prenom: "",
+        sexe: "",
+        dateNaissance: "",
+        dateInscription: new Date().toISOString(),
+        photoURL: user.photoURL || ""
+      });
+
       alert("Connecté avec Google : " + user.email);
-      window.location.href = "mur.html";
+      window.location.href = "mur.html"; // Redirection
     })
     .catch((error) => {
-      console.error(error);
       alert("Erreur Google : " + error.message);
     });
 });
